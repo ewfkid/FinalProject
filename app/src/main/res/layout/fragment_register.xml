@@ -116,8 +116,7 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/edittextHeight"
                     android:layout_marginTop="30dp"
-                    android:backgroundTint="@color/g_blue"
-                    android:text="@string/login_button"
+                    android:text="@string/register_btn"
                     app:layout_constraintEnd_toEndOf="@id/guidelineRegisterRight"
                     app:layout_constraintStart_toStartOf="@id/guidelineRegisterLeft"
                     app:layout_constraintTop_toBottomOf="@id/et_password_register" />

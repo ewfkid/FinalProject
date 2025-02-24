@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public interface EventRepository {
+
     void getAllEvents(Consumer<Status<List<ItemEventEntity>>> callback);
     void getEvent(@NonNull String id, Consumer<Status<FullEventEntity>> callback);
 }

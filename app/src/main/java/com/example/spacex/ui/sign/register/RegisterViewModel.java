@@ -109,8 +109,8 @@ public class RegisterViewModel extends ViewModel {
             @NonNull final String currentPassword
     ) {
         createUserUseCase.execute(
-                currentUsername,
                 currentName,
+                currentUsername,
                 currentEmail,
                 currentPassword,
                 status -> {
