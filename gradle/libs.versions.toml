@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.2"
+datastorePreferences = "1.0.0"
 kotlin = "1.9.0"
 coreKtx = "1.12.0"
 lifecycleRuntimeKtx = "2.7.0"
@@ -13,6 +14,7 @@ lifecycleViewmodelKtx = "2.7.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }

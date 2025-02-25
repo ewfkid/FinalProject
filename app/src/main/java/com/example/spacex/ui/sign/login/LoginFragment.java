@@ -1,5 +1,7 @@
 package com.example.spacex.ui.sign.login;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -18,7 +20,6 @@ import com.example.spacex.ui.utils.OnChangeText;
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
-
     private LoginViewModel viewModel;
 
     public LoginFragment() {
@@ -30,6 +31,7 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentLoginBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        loadUserData();
 
         binding.etEmailLogin.addTextChangedListener(new OnChangeText() {
             @Override
@@ -38,6 +40,7 @@ public class LoginFragment extends Fragment {
                 viewModel.changeUsername(s.toString());
             }
         });
+
         binding.etPasswordLogin.addTextChangedListener(new OnChangeText() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -45,20 +48,30 @@ public class LoginFragment extends Fragment {
                 viewModel.changePassword(s.toString());
             }
         });
+
         binding.login.setOnClickListener(v -> viewModel.login());
         binding.tvDontHaveAccount.setOnClickListener(v -> openRegister());
 
-        subscribe(viewModel);
+        if (viewModel.isUserLoggedIn()) {
+            openEvents();
+            return;
+        }
 
+        binding.login.setOnClickListener(v -> viewModel.login());
+
+        subscribe(viewModel);
     }
 
     private void subscribe(LoginViewModel viewModel) {
-
         viewModel.errorLiveData.observe(getViewLifecycleOwner(), error ->
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show()
         );
 
-        viewModel.openEventsLiveData.observe(getViewLifecycleOwner(), unused -> openEvents());
+        viewModel.openEventsLiveData.observe(getViewLifecycleOwner(), isLoggedIn -> {
+            if (isLoggedIn) {
+                openEvents();
+            }
+        });
 
         viewModel.openRegisterLiveData.observe(getViewLifecycleOwner(), unused -> openRegister());
     }
@@ -67,14 +80,25 @@ public class LoginFragment extends Fragment {
         final View view = getView();
         if (view == null) return;
         Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment);
-
     }
 
     private void openEvents() {
         final View view = getView();
         if (view == null) return;
         Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_fragment_list);
-        Navigation.findNavController(view).clearBackStack(R.id.action_loginFragment_to_fragment_list);
+    }
+
+    private void loadUserData() {
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        String savedUsername = sharedPreferences.getString("username", "");
+        String savedPassword = sharedPreferences.getString("password", "");
+
+        if (!savedUsername.isEmpty() && !savedPassword.isEmpty()) {
+            binding.etEmailLogin.setText(savedUsername);
+            binding.etPasswordLogin.setText(savedPassword);
+            viewModel.changeUsername(savedUsername);
+            viewModel.changePassword(savedPassword);
+        }
     }
 
     @Override
@@ -83,4 +107,3 @@ public class LoginFragment extends Fragment {
         super.onDestroyView();
     }
 }
-
