@@ -74,7 +74,7 @@ public class LoginFragment extends Fragment {
         final View view = getView();
         if (view == null) return;
         Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_fragment_list);
-
+        Navigation.findNavController(view).clearBackStack(R.id.action_loginFragment_to_fragment_list);
     }
 
     @Override
