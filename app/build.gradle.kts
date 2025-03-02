@@ -48,5 +48,4 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.picasso)
     implementation(libs.material)
-
 }

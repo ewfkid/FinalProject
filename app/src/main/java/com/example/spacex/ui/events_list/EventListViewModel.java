@@ -1,4 +1,4 @@
-package com.example.spacex.ui.list;
+package com.example.spacex.ui.events_list;
 
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;

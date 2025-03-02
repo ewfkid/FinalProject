@@ -1,4 +1,4 @@
-package com.example.spacex.ui.list;
+package com.example.spacex.ui.events_list;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,24 +10,24 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.spacex.R;
-import com.example.spacex.databinding.FragmentListBinding;
+import com.example.spacex.databinding.FragmentEventsListBinding;
 import com.example.spacex.ui.event.EventFragment;
 import com.example.spacex.ui.utils.Utils;
 
 public class EventListFragment extends Fragment {
 
-    private FragmentListBinding binding;
+    private FragmentEventsListBinding binding;
 
     private EventListViewModel viewModel;
 
     public EventListFragment(){
-        super(R.layout.fragment_list);
+        super(R.layout.fragment_events_list);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding = FragmentListBinding.bind(view);
+        binding = FragmentEventsListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(EventListViewModel.class);
         binding.refresh.setOnRefreshListener(() -> viewModel.update());
         final EventListAdapter adapter = new EventListAdapter(id -> openProfile(id));

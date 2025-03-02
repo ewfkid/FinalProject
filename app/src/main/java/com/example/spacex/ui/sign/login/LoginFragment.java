@@ -20,6 +20,7 @@ import com.example.spacex.ui.utils.OnChangeText;
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding binding;
+
     private LoginViewModel viewModel;
 
     public LoginFragment() {

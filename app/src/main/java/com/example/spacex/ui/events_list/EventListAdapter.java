@@ -1,4 +1,4 @@
-package com.example.spacex.ui.list;
+package com.example.spacex.ui.events_list;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -61,7 +61,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         }
 
         public void bind(ItemEventEntity item) {
-            binding.eventTitle.setText(item.getTitle());
+            binding.tvTitle.setText(item.getTitle());
             binding.getRoot().setOnClickListener(v -> {
                 onItemClick.accept(item.getId());
             });

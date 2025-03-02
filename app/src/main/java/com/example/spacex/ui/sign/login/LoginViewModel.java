@@ -58,21 +58,21 @@ public class LoginViewModel extends AndroidViewModel {
 
     public void login() {
         if (username == null || username.isEmpty()) {
-            mutableErrorLiveData.postValue("Никнейм не может быть пустым");
+            mutableErrorLiveData.postValue("Username cannot be empty");
             return;
         }
         if (password == null || password.isEmpty()) {
-            mutableErrorLiveData.postValue("Пароль не может быть пустым");
+            mutableErrorLiveData.postValue("Password cannot be empty");
             return;
         }
 
         isUserExistUseCase.execute(username, status -> {
             if (status.getValue() == null || status.getError() != null) {
-                mutableErrorLiveData.postValue("Ошибка входа. Попробуйте снова.");
+                mutableErrorLiveData.postValue("Something went wrong. Try again later");
                 return;
             }
             if (!status.getValue()) {
-                mutableErrorLiveData.postValue("Вы не зарегистрированы. Пожалуйста, зарегистрируйтесь!");
+                mutableErrorLiveData.postValue("User does not exist. Please register");
             } else {
                 loginUser(username, password);
             }
@@ -83,10 +83,10 @@ public class LoginViewModel extends AndroidViewModel {
         loginUserUseCase.execute(currentUsername, currentPassword, status -> {
             if (status.getStatusCode() == 200 && status.getError() == null) {
                 saveUserData(currentUsername, currentPassword);
-                saveUserLoggedIn(true); // Помечаем, что пользователь вошел
+                saveUserLoggedIn(true);
                 mutableOpenEventsLiveData.postValue(true);
             } else {
-                mutableErrorLiveData.postValue("Ошибка входа. Попробуйте снова.");
+                mutableErrorLiveData.postValue("Something went wrong. Try again later");
             }
         });
     }

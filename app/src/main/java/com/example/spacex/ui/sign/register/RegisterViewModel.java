@@ -70,32 +70,32 @@ public class RegisterViewModel extends ViewModel {
         final String currentEmail = email;
 
         if (currentUsername == null || currentUsername.isEmpty()) {
-            mutableErrorLiveData.postValue("Никнейм не может быть пустым");
+            mutableErrorLiveData.postValue("Username cannot be empty");
             return;
         }
 
         if (currentName == null || currentName.isEmpty()) {
-            mutableErrorLiveData.postValue("Имя не может быть пустым");
+            mutableErrorLiveData.postValue("Name cannot be empty");
             return;
         }
 
         if (currentEmail == null || currentEmail.isEmpty()) {
-            mutableErrorLiveData.postValue("Email не может быть пустым");
+            mutableErrorLiveData.postValue("Email cannot be empty");
             return;
         }
 
         if (currentPassword == null || currentPassword.isEmpty()) {
-            mutableErrorLiveData.postValue("Пароль не может быть пустым");
+            mutableErrorLiveData.postValue("Password cannot be empty");
             return;
         }
 
         isUserExistUseCase.execute(currentUsername, status -> {
             if (status.getValue() == null || status.getError() != null) {
-                mutableErrorLiveData.postValue("Что-то пошло не так. Попробуйте снова");
+                mutableErrorLiveData.postValue("Something went wrong. Try again later");
                 return;
             }
             if (status.getValue()) {
-                mutableErrorLiveData.postValue("Аккаунт уже существует. Пожалуйста войдите в аккаунт");
+                mutableErrorLiveData.postValue("User already exists. Please login");
             } else {
                 createAccount(currentUsername, currentName, currentEmail, currentPassword);
             }
@@ -117,7 +117,7 @@ public class RegisterViewModel extends ViewModel {
                     if (status.getStatusCode() == 201 && status.getError() == null) {
                         mutableOpenLoginLiveData.postValue(null);
                     } else {
-                        mutableErrorLiveData.postValue("Something wrong");
+                        mutableErrorLiveData.postValue("Something wrong. Try again later");
                     }
                 });
     }
