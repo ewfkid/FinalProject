@@ -1,5 +1,6 @@
 package com.example.spacex.data.network;
 
+import com.example.spacex.data.source.ArticleApi;
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.EventApi;
 import com.example.spacex.data.source.UserApi;
@@ -43,7 +44,14 @@ public class RetrofitFactory {
             .build();
 
     private final Retrofit retrofitUser = new Retrofit.Builder()
-            .baseUrl("http://192.168.0.49:8080/")
+            .baseUrl("http://10.0.2.2:8080/")
+            .client(client.build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    private final Retrofit retrofitArticle = new Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8080/")
+
             .client(client.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
@@ -53,4 +61,7 @@ public class RetrofitFactory {
     }
 
     public UserApi getUserApi(){return retrofitUser.create(UserApi.class);}
+
+    public ArticleApi getArticleApi() { return retrofitArticle.create(ArticleApi.class);
+    }
 }

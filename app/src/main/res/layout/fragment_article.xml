@@ -1,17 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditText
+        android:id="@+id/articleIdEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Article ID" />
+
+    <EditText
+        android:id="@+id/articleTitleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Article title" />
+
+    <EditText
+        android:id="@+id/articleContentEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contents of the article"
+        android:inputType="textMultiLine" />
+
+    <Button
+        android:id="@+id/createArticleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Fragment Article"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Create an article" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/updateArticleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update article" />
+
+    <Button
+        android:id="@+id/deleteArticleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete article" />
+
+
+    <Button
+        android:id="@+id/showAllArticlesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show all articles" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/articleRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="16dp" />
+
+</LinearLayout>
