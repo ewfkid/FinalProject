@@ -1,5 +1,6 @@
 package com.example.spacex.data.network;
 
+import com.example.spacex.data.source.ArticleApi;
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.EventApi;
 import com.example.spacex.data.source.LaunchApi;
@@ -57,5 +58,8 @@ public class RetrofitFactory {
 
     public LaunchApi getLaunchApi(){
         return retrofitApi.create(LaunchApi.class);
+    }
+
+    public ArticleApi getArticleApi() { return retrofitApi.create(ArticleApi.class);
     }
 }
