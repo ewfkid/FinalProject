@@ -2,6 +2,7 @@ package com.example.spacex.data.network;
 
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.EventApi;
+import com.example.spacex.data.source.LaunchApi;
 import com.example.spacex.data.source.UserApi;
 
 import okhttp3.OkHttpClient;
@@ -37,7 +38,7 @@ public class RetrofitFactory {
                     }
             );
 
-    private final Retrofit retrofitEvent = new Retrofit.Builder()
+    private final Retrofit retrofitApi = new Retrofit.Builder()
             .baseUrl("https://api.spacexdata.com/v3/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();
@@ -49,8 +50,12 @@ public class RetrofitFactory {
             .build();
 
     public EventApi getEventApi() {
-        return retrofitEvent.create(EventApi.class);
+        return retrofitApi.create(EventApi.class);
     }
 
     public UserApi getUserApi(){return retrofitUser.create(UserApi.class);}
+
+    public LaunchApi getLaunchApi(){
+        return retrofitApi.create(LaunchApi.class);
+    }
 }

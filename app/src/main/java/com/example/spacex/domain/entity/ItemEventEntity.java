@@ -10,9 +10,17 @@ public class ItemEventEntity {
     @NonNull
     private final String title;
 
-    public ItemEventEntity(@NonNull String id, @NonNull String title) {
+    @NonNull
+    private final String dataUtc;
+
+    public ItemEventEntity(
+            @NonNull String id,
+            @NonNull String title,
+            @NonNull String dataUtc
+    ) {
         this.id = id;
         this.title = title;
+        this.dataUtc = dataUtc;
     }
 
     @NonNull
@@ -23,5 +31,10 @@ public class ItemEventEntity {
     @NonNull
     public String getTitle() {
         return title;
+    }
+
+    @NonNull
+    public String getDataUtc() {
+        return dataUtc;
     }
 }

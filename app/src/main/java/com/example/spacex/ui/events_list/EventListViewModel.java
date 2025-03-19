@@ -14,7 +14,7 @@ import java.util.List;
 
 public class EventListViewModel extends ViewModel {
 
-    private final MutableLiveData<State> mutableLiveData = new MutableLiveData<State>();
+    private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
 
     public final LiveData<State> stateLiveData = mutableLiveData;
 
@@ -29,11 +29,11 @@ public class EventListViewModel extends ViewModel {
     public void update() {
         mutableLiveData.setValue(new State(null, null, true));
         getEventListUseCase.execute(status -> {
-            mutableLiveData.postValue(formStatus(status));
+            mutableLiveData.postValue(fromStatus(status));
         });
     }
 
-    private State formStatus(Status<List<ItemEventEntity>> status) {
+    private State fromStatus(Status<List<ItemEventEntity>> status) {
         return new State(
                 status.getError() != null ? status.getError().getLocalizedMessage() : null,
                 status.getValue(),

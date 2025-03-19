@@ -14,17 +14,17 @@
 
         <TextView
             android:id="@+id/error"
-            style="@style/h2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textAlignment="center"
+            style="@style/h2"
             android:visibility="gone"
+            tools:text="@tools:sample/lorem/random"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@tools:sample/lorem/random" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <ProgressBar
             android:id="@+id/progressbar"
@@ -43,7 +43,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/tv_event_title"
+                android:id="@+id/mission_name"
                 style="@style/h3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Falcon 1 Makes History" />
+                tools:text="OG-2 MISSION" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint_event"
@@ -61,18 +61,53 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@id/guideline2"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintTop_toBottomOf="@+id/tv_event_title">
+                app:layout_constraintTop_toBottomOf="@+id/mission_name">
+
+                <ImageView
+                    android:id="@+id/mission_image"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@tools:sample/avatars" />
+
 
                 <TextView
-                    android:id="@+id/tv_event_data"
+                    android:id="@+id/rocket_name"
                     style="@style/h2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="3dp"
                     android:textColor="@color/black"
-                    app:layout_constraintStart_toStartOf="@id/constraint_event"
-                    app:layout_constraintTop_toTopOf="@+id/constraint_event"
-                    tools:text="2008 august 23" />
+                    app:layout_constraintStart_toEndOf="@id/mission_image"
+                    app:layout_constraintTop_toTopOf="@+id/mission_image"
+                    tools:text="Falcon" />
+
+
+                <TextView
+                    android:id="@+id/title_rocket_type"
+                    style="@style/h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rocket_type"
+                    android:textColor="@color/g_gray700"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="@+id/rocket_name"
+                    app:layout_constraintTop_toBottomOf="@id/rocket_name" />
+
+                <TextView
+                    android:id="@+id/rocket_type"
+                    style="@style/h2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="9dp"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@id/title_rocket_type"
+                    app:layout_constraintStart_toEndOf="@id/title_rocket_type"
+                    tools:text="Merlin A" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -99,19 +134,101 @@
                 app:layout_constraintStart_toStartOf="@id/guideline1"
                 app:layout_constraintTop_toBottomOf="@id/tv_details">
 
-                <TextView
-                    android:id="@+id/tv_event_details"
-                    style="@style/h2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="15dp"
-                    android:layout_weight="1"
-                    android:textColor="@color/black"
-                    android:textStyle="normal"
-                    tools:text="Falcon 1 becomes the first privately developed liquid fuel rocket to reach Earth orbit." />
+                <LinearLayout
+                    android:id="@+id/linear_event_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_event"
+                        app:tint="@color/g_blue" />
+
+                    <TextView
+                        android:id="@+id/data_utc"
+                        style="@style/MediumTextViewThin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        tools:text="2023-07-25" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/linear_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_launch"
+                        app:tint="@color/g_blue" />
+
+                    <TextView
+                        android:id="@+id/status"
+                        style="@style/MediumTextViewThin"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        tools:text="Success" />
+                </LinearLayout>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/information"
+                style="@style/h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/information"
+                android:textColor="@color/g_blue"
+                android:textStyle="normal"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@id/linear_details" />
+
+            <LinearLayout
+                android:id="@+id/linear_information"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="@id/guideline2"
+                app:layout_constraintStart_toStartOf="@id/guideline1"
+                app:layout_constraintTop_toBottomOf="@id/information">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details"
+                        style="@style/h2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        tools:text="SSL-manufactured communications satellite intended to be placed at 63° West over the Americas." />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/learn_more"
@@ -124,7 +241,7 @@
                 android:textStyle="normal"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@id/guideline1"
-                app:layout_constraintTop_toBottomOf="@id/linear_details" />
+                app:layout_constraintTop_toBottomOf="@id/linear_information" />
 
             <LinearLayout
                 android:id="@+id/linear_learn_more"
@@ -144,15 +261,15 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/article_logo"
+                        android:id="@+id/youtube_logo"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_spacex_article"
+                        android:src="@drawable/ic_youtube"
                         android:visibility="visible" />
 
                     <TextView
-                        android:id="@+id/article"
+                        android:id="@+id/youtube"
                         style="@style/MediumTextViewThin"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -161,7 +278,7 @@
                         android:layout_weight="1"
                         android:clickable="true"
                         android:focusable="true"
-                        android:text="@string/article"
+                        android:text="@string/youtube"
                         android:textColor="@color/g_gray700"
                         android:textStyle="bold"
                         android:visibility="visible" />
@@ -198,36 +315,6 @@
                         android:visibility="visible" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/linear_reddit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/reddit_logo"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:src="@drawable/ic_reddit"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/reddit"
-                        style="@style/MediumTextViewThin"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="15dp"
-                        android:layout_weight="1"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:text="@string/reddit"
-                        android:textColor="@color/g_gray700"
-                        android:textStyle="bold"
-                        android:visibility="visible" />
-                </LinearLayout>
 
             </LinearLayout>
 

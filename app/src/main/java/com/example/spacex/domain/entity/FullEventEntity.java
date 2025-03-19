@@ -1,6 +1,7 @@
 package com.example.spacex.domain.entity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class FullEventEntity {
     @NonNull
@@ -15,21 +16,33 @@ public class FullEventEntity {
     @NonNull
     private final String eventDetails;
 
-    @NonNull
-    private final String flightNumber;
+    @Nullable
+    private final String articleLink;
 
-    public FullEventEntity(@NonNull String id,
-                           @NonNull String title,
-                           @NonNull String eventDateUtc,
-                           @NonNull String eventDetails,
-                           @NonNull String flightNumber
+    @Nullable
+    private final String wikipediaLink;
+
+    @Nullable
+    private final String redditLink;
+
+    public FullEventEntity(
+            @NonNull String id,
+            @NonNull String title,
+            @NonNull String eventDateUtc,
+            @NonNull String eventDetails,
+            @Nullable String articleLink,
+            @Nullable String wikipediaLink,
+            @Nullable String redditLink
     ) {
         this.id = id;
         this.title = title;
         this.eventDateUtc = eventDateUtc;
         this.eventDetails = eventDetails;
-        this.flightNumber = flightNumber;
+        this.articleLink = articleLink;
+        this.wikipediaLink = wikipediaLink;
+        this.redditLink = redditLink;
     }
+
 
     @NonNull
     public String getId() {
@@ -51,8 +64,18 @@ public class FullEventEntity {
         return eventDetails;
     }
 
-    @NonNull
-    public String getFlightNumber() {
-        return flightNumber;
+    @Nullable
+    public String getRedditLink() {
+        return redditLink;
+    }
+
+    @Nullable
+    public String getArticleLink() {
+        return articleLink;
+    }
+
+    @Nullable
+    public String getWikipediaLink() {
+        return wikipediaLink;
     }
 }

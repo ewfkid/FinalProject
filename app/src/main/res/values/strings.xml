@@ -11,4 +11,16 @@
     <string name="email_hint">Email</string>
     <string name="et_password_register">Password</string>
     <string name="register_btn">Register</string>
+    <string name="launch_year">Launch year:</string>
+    <string name="rocket_name">Rocket name:</string>
+    <string name="status">Status:</string>
+    <string name="rocket_type">Rocket type:</string>
+    <string name="details">Details</string>
+    <string name="information">Information</string>
+    <string name="learn_more">Learn more on</string>
+    <string name="youtube">YouTube</string>
+    <string name="wikipedia">Wikipedia</string>
+    <string name="date">Date:</string>
+    <string name="article">Article</string>
+    <string name="reddit">Reddit</string>
 </resources>

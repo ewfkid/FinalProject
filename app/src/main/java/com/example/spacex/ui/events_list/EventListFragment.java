@@ -30,7 +30,7 @@ public class EventListFragment extends Fragment {
         binding = FragmentEventsListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(EventListViewModel.class);
         binding.refresh.setOnRefreshListener(() -> viewModel.update());
-        final EventListAdapter adapter = new EventListAdapter(id -> openProfile(id));
+        final EventListAdapter adapter = new EventListAdapter(id -> viewEvent(id));
         binding.recycler.setAdapter(adapter);
         subscribe(viewModel, adapter);
     }
@@ -53,12 +53,13 @@ public class EventListFragment extends Fragment {
         });
     }
 
-    private void openProfile(@NonNull String id) {
+    private void viewEvent(@NonNull String id) {
         View view = getView();
         if (view == null) return;
       Navigation.findNavController(view).navigate(
                R.id.action_eventListFragment_to_eventFragment,
-                EventFragment.getBundle(id));
+                EventFragment.getBundle(id)
+      );
     }
 
     @Override

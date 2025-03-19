@@ -1,4 +1,4 @@
-package com.example.spacex.ui.event;
+package com.example.spacex.ui.launch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,28 +6,28 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.spacex.data.EventRepositoryImpl;
+import com.example.spacex.data.LaunchRepositoryImpl;
+import com.example.spacex.domain.entity.FullLaunchEntity;
 import com.example.spacex.domain.entity.Status;
-import com.example.spacex.domain.event.GetEventByIdUseCase;
-import com.example.spacex.domain.entity.FullEventEntity;
+import com.example.spacex.domain.launch.GetLaunchByFlightNumberUseCase;
 
-public class EventViewModel extends ViewModel {
+public class LaunchViewModel extends ViewModel {
 
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableLiveData;
 
-    private final GetEventByIdUseCase getEventByIdUseCase = new GetEventByIdUseCase(
-            EventRepositoryImpl.getInstance()
+    private final GetLaunchByFlightNumberUseCase getLaunchByFlightNumberUseCase = new GetLaunchByFlightNumberUseCase(
+            LaunchRepositoryImpl.getInstance()
     );
 
-    public void load(@NonNull String id) {
+    public void load(@NonNull String flightNumber) {
         mutableLiveData.setValue(new State(null, null, true));
-        getEventByIdUseCase.execute(id, status -> {
+        getLaunchByFlightNumberUseCase.execute(flightNumber, status -> {
             mutableLiveData.postValue(fromStatus(status));
         });
     }
 
-    private State fromStatus(Status<FullEventEntity> status) {
+    private State fromStatus(Status<FullLaunchEntity> status) {
         return new State(
                 status.getError() != null ? status.getError().getLocalizedMessage() : null,
                 status.getValue(),
@@ -36,15 +36,18 @@ public class EventViewModel extends ViewModel {
     }
 
     public static class State {
+
         @Nullable
         private final String errorMessage;
+
         @Nullable
-        private final FullEventEntity event;
+        private final FullLaunchEntity launch;
+
         private final boolean isLoading;
 
-        public State(@Nullable String errorMessage, @Nullable FullEventEntity event, boolean isLoading) {
+        public State(@Nullable String errorMessage, @Nullable FullLaunchEntity launch, boolean isLoading) {
             this.errorMessage = errorMessage;
-            this.event = event;
+            this.launch = launch;
             this.isLoading = isLoading;
         }
 
@@ -54,8 +57,8 @@ public class EventViewModel extends ViewModel {
         }
 
         @Nullable
-        public FullEventEntity getEvent() {
-            return event;
+        public FullLaunchEntity getLaunch() {
+            return launch;
         }
 
         public boolean isLoading() {

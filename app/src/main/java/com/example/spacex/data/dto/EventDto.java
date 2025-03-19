@@ -19,10 +19,24 @@ public class EventDto {
     public String eventDateUtc;
 
     @Nullable
-    @SerializedName("flight_number")
-    public String flightNumber;
-
-    @Nullable
     @SerializedName("details")
     public String eventDetails;
+
+    @Nullable
+    @SerializedName("links")
+    public Links links;
+
+    public static class Links {
+        @Nullable
+        @SerializedName("reddit")
+        public String reddit;
+
+        @Nullable
+        @SerializedName("article")
+        public String article;
+
+        @Nullable
+        @SerializedName("wikipedia")
+        public String wikipedia;
+    }
 }
