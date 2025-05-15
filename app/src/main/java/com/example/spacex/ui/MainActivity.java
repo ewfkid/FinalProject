@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.profileFragment) {
                 navController.navigate(R.id.profileFragment);
             }
-            if (item.getItemId() == R.id.articleFragment) {
-                navController.navigate(R.id.articleFragment);
+            if (item.getItemId() == R.id.articlesListFragment) {
+                navController.navigate(R.id.articlesListFragment);
             }
             if (item.getItemId() == R.id.eventListFragment) {
                 navController.navigate(R.id.fragment_list);

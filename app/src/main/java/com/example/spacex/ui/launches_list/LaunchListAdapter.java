@@ -1,6 +1,5 @@
 package com.example.spacex.ui.launches_list;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 

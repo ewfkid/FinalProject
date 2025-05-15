@@ -11,9 +11,6 @@ public class Status<T> {
     @Nullable
     private final Throwable error;
 
-
-
-
     public Status(int statusCode, @Nullable T value, @Nullable Throwable error) {
         this.statusCode = statusCode;
         this.value = value;
@@ -34,8 +31,6 @@ public class Status<T> {
     public Throwable getError() {
         return error;
     }
-
-
 
 
     public boolean isSuccess() {

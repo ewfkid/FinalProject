@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/nested_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4F4F4"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/article_screen_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/article_section"
+            layout="@layout/fragment_article" />
+
+        <include
+            android:id="@+id/comments_section"
+            layout="@layout/fragment_comments_list" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

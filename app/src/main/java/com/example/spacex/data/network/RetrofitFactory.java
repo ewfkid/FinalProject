@@ -1,6 +1,7 @@
 package com.example.spacex.data.network;
 
 import com.example.spacex.data.source.ArticleApi;
+import com.example.spacex.data.source.CommentApi;
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.EventApi;
 import com.example.spacex.data.source.LaunchApi;
@@ -14,7 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitFactory {
     private static RetrofitFactory INSTANCE;
 
-    private RetrofitFactory() {}
+    private RetrofitFactory() {
+    }
 
     public static synchronized RetrofitFactory getInstance() {
         if (INSTANCE == null) {
@@ -54,12 +56,20 @@ public class RetrofitFactory {
         return retrofitApi.create(EventApi.class);
     }
 
-    public UserApi getUserApi(){return retrofitUser.create(UserApi.class);}
+    public UserApi getUserApi() {
+        return retrofitUser.create(UserApi.class);
+    }
 
-    public LaunchApi getLaunchApi(){
+    public LaunchApi getLaunchApi() {
         return retrofitApi.create(LaunchApi.class);
     }
 
-    public ArticleApi getArticleApi() { return retrofitApi.create(ArticleApi.class);
+    public ArticleApi getArticleApi() {
+        return retrofitUser.create(ArticleApi.class);
     }
+
+    public CommentApi getCommentApi() {
+        return retrofitUser.create(CommentApi.class);
+    }
+
 }

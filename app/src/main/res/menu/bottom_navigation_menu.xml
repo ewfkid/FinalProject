@@ -6,7 +6,7 @@
 
     <item android:title=""
         android:icon="@drawable/ic_article"
-        android:id="@+id/articleFragment"/>
+        android:id="@+id/articlesListFragment"/>
 
     <item android:title=""
         android:icon="@drawable/ic_map"

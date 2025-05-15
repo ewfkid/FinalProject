@@ -3,21 +3,24 @@ package com.example.spacex.data;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.spacex.data.dto.ArticleDto;
+import com.example.spacex.data.dto.ArticleInitDto;
+import com.example.spacex.data.dto.CommentDto;
 import com.example.spacex.data.network.RetrofitFactory;
 import com.example.spacex.data.source.ArticleApi;
 import com.example.spacex.data.utils.CallToConsumer;
-import com.example.spacex.domain.entity.ArticleEntity;
-import com.example.spacex.domain.entity.FullEventEntity;
-import com.example.spacex.domain.entity.Status;
+import com.example.spacex.data.utils.mapper.ArticleMapper;
+import com.example.spacex.data.utils.mapper.CommentMapper;
 import com.example.spacex.domain.article.ArticleRepository;
-import com.example.spacex.domain.entity.StatusCode;
-
+import com.example.spacex.domain.entity.CommentEntity;
+import com.example.spacex.domain.entity.FullArticleEntity;
+import com.example.spacex.domain.entity.ItemArticleEntity;
+import com.example.spacex.domain.entity.Status;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 import retrofit2.Call;
@@ -26,60 +29,93 @@ import retrofit2.Response;
 
 
 public class ArticleRepositoryImpl implements ArticleRepository {
-    private final ArticleApi articleApi;
 
-    public ArticleRepositoryImpl() {
+    private final ArticleApi articleApi = RetrofitFactory.getInstance().getArticleApi();
 
-        this.articleApi = RetrofitFactory.getInstance().getArticleApi();
+    private static ArticleRepositoryImpl INSTANCE;
+
+    private ArticleRepositoryImpl() {
+    }
+
+    public static synchronized ArticleRepositoryImpl getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ArticleRepositoryImpl();
+        }
+        return INSTANCE;
     }
 
     @Override
-    public void getAllArticles(@NonNull String id, Consumer<Status<List<ArticleEntity>>> callback) {
+    public void getAllArticles(Consumer<Status<List<ItemArticleEntity>>> callback) {
         articleApi.getAllArticles().enqueue(new CallToConsumer<>(
                 callback,
-                articlesDto -> {
-
-                    if (articlesDto == null) {
-                        return new ArrayList<>();
-                    }
-
-                    List<ArticleEntity> result = new ArrayList<>(articlesDto.size());
-                    for (ArticleDto article : articlesDto) {
-                        final String resultId = article.getId();
-                        final String title = article.getTitle();
-                        final String content = article.getContent();
-                        if (resultId != null && title != null && content != null) {
-                            result.add(new ArticleEntity(resultId, title, content));
-                        }
-                    }
-                    return result;
-                }
+                ArticleMapper::toItemArticleEntityList
         ));
     }
 
+
     @Override
-    public void createArticle(@NonNull String title, @NonNull String content, Consumer<Status<Void>> callback) {
-        ArticleDto newArticle = new ArticleDto(title, content);
-        articleApi.createArticle(newArticle).enqueue(new CallToConsumer<>(
-                callback,
-                response -> null
-        ));
+    public void createArticle(
+            @NonNull String title,
+            @NonNull String content,
+            @NonNull String userNickname,
+            @Nullable String userAvatar,
+            @NonNull Integer likes,
+            @NonNull Integer dislikes,
+            @Nullable ArrayList<CommentEntity> comments,
+            Consumer<Status<Void>> callback
+    ) {
+        articleApi.createArticle(new ArticleInitDto(
+                title,
+                content,
+                userNickname,
+                userAvatar,
+                0,
+                0,
+                new ArrayList<>()
+        )).enqueue(new CallToConsumer<>(
+                        callback,
+                        dto -> null
+                )
+        );
+
     }
 
     @Override
     public void deleteArticle(@NonNull String id, Consumer<Status<Void>> callback) {
         articleApi.deleteArticle(id).enqueue(new CallToConsumer<>(
                 callback,
-                response -> null
+                dto -> null
         ));
     }
 
     @Override
-    public void update(@NonNull String id, @NonNull String title, @NonNull String content, Consumer<Status<Void>> callback) {
-        ArticleDto updatedArticle = new ArticleDto(title, content);
-        articleApi.update(id, updatedArticle).enqueue(new CallToConsumer<>(
+    public void update(
+            @NonNull String id,
+            @NonNull String title,
+            @NonNull String content,
+            @NonNull String username,
+            @Nullable String photoUrl,
+            @NonNull Integer likes,
+            @NonNull Integer dislikes,
+            @Nullable ArrayList<CommentEntity> comments,
+            Consumer<Status<FullArticleEntity>> callback
+    ) {
+        ArrayList<CommentDto> commentsDto = null;
+        if (comments != null) {
+            commentsDto = new ArrayList<>(CommentMapper.toCommentDtoList(comments));
+        }
+
+        articleApi.update(
+                id, new ArticleDto(id, title, content, username, photoUrl, likes, dislikes, commentsDto)
+        ).enqueue(new CallToConsumer<>(callback, ArticleMapper::toFullArticleEntity));
+    }
+
+    @Override
+    public void getArticle(@NonNull String id, Consumer<Status<FullArticleEntity>> callback) {
+        articleApi.getArticleById(id).enqueue(new CallToConsumer<>(
                 callback,
-                response -> null
+                ArticleMapper::toFullArticleEntity
         ));
     }
+
 }

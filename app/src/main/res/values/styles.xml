@@ -85,4 +85,8 @@
         <item name="fontFamily">@font/sf_pro_display</item>
     </style>
 
+    <style name="RoundImageStyle">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

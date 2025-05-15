@@ -2,7 +2,7 @@ package com.example.spacex.domain.article;
 
 import androidx.annotation.NonNull;
 
-import com.example.spacex.domain.entity.ArticleEntity;
+import com.example.spacex.domain.entity.ItemArticleEntity;
 import com.example.spacex.domain.entity.Status;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class GetArticleListUseCase {
         this.repo = repo;
     }
 
-    public void execute(String id, Consumer<Status<List<ArticleEntity>>> callback) {
-        repo.getAllArticles(id, callback);
+    public void execute(Consumer<Status<List<ItemArticleEntity>>> callback) {
+        repo.getAllArticles(callback);
     }
 }

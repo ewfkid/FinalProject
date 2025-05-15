@@ -47,10 +47,14 @@
     </fragment>
 
     <fragment
-        android:id="@+id/articleFragment"
-        android:name="com.example.spacex.ui.article.ArticleFragment"
-        android:label="ArticleFragment"
-        tools:layout="@layout/fragment_article"/>
+        android:id="@+id/articlesListFragment"
+        android:name="com.example.spacex.ui.articles_list.ArticleListFragment"
+        android:label="ArticlesListFragment"
+        tools:layout="@layout/fragment_articles_list">
+        <action
+            android:id="@+id/action_articlesListFragment_to_articleScreenFragment"
+            app:destination="@id/articleScreenFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
@@ -83,6 +87,35 @@
             android:defaultValue="0"
             app:nullable="false"
             app:argType="string"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/commentListFragment"
+        android:name="com.example.spacex.ui.article_and_comments.comments_list.CommentListFragment"
+        android:label="CommentListFragment"
+        tools:layout="@layout/fragment_comments_list">
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.example.spacex.ui.article_and_comments.article.ArticleFragment"
+        android:label="ArticleFragment"
+        tools:layout="@layout/fragment_article">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleScreenFragment"
+        android:name="com.example.spacex.ui.article_and_comments.ArticleScreenFragment"
+        android:label="ArticleScreenFragment"
+        tools:layout="@layout/fragment_article_screen">
+        <argument
+            android:name="articleId"
+            android:defaultValue="0"
+            app:nullable="false"
+            app:argType="string"/>
+
     </fragment>
 
 
