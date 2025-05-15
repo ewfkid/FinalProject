@@ -21,9 +21,10 @@ public class ArticleMapper {
         final String photoUrl = articleDto.getPhotoUrl();
         final Integer likes = articleDto.getLikes();
         final Integer dislikes = articleDto.getDislikes();
+        final boolean favourite = articleDto.isFavourite();
 
         if (id != null && title != null && username != null && likes != null && dislikes != null) {
-            return new ItemArticleEntity(id, title, username, photoUrl, likes, dislikes);
+            return new ItemArticleEntity(id, title, username, photoUrl, likes, dislikes, favourite);
         }
         return null;
     }
@@ -51,9 +52,10 @@ public class ArticleMapper {
         final Integer dislikes = articleDto.getDislikes();
         final List<CommentEntity> comments = articleDto.getComments() != null
                 ? CommentMapper.toCommentEntityList(articleDto.getComments()) : null;
+        final boolean favourite = articleDto.isFavourite();
 
         if (id != null && title != null && content != null && username != null && likes != null && dislikes != null) {
-            return new FullArticleEntity(id, title, content, username, photoUrl, likes, dislikes, comments);
+            return new FullArticleEntity(id, title, content, username, photoUrl, likes, dislikes, comments, favourite);
         }
         return null;
     }

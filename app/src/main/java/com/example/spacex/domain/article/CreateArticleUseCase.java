@@ -22,8 +22,9 @@ public class CreateArticleUseCase {
             @NonNull Integer likes,
             @NonNull Integer dislikes,
             @Nullable ArrayList<CommentEntity> comments,
+            boolean favourite,
             Consumer<Status<Void>> callback
     ) {
-        repo.createArticle(title, content, username, photoUrl, likes, dislikes, comments, callback);
+        repo.createArticle(title, content, username, photoUrl, likes, dislikes, comments, favourite, callback);
     }
 }

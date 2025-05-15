@@ -30,6 +30,8 @@ public class FullArticleEntity {
     @Nullable
     private final List<CommentEntity> comments;
 
+    private final boolean favourite;
+
     public FullArticleEntity(
             @NonNull String id,
             @NonNull String title,
@@ -38,7 +40,8 @@ public class FullArticleEntity {
             @Nullable String photoUrl,
             @NonNull Integer likes,
             @NonNull Integer dislikes,
-            @Nullable List<CommentEntity> comments
+            @Nullable List<CommentEntity> comments,
+            boolean favourite
     ) {
         this.id = id;
         this.title = title;
@@ -48,6 +51,7 @@ public class FullArticleEntity {
         this.likes = likes;
         this.dislikes = dislikes;
         this.comments = comments;
+        this.favourite = favourite;
     }
 
     @NonNull
@@ -88,5 +92,9 @@ public class FullArticleEntity {
     @Nullable
     public List<CommentEntity> getComments() {
         return comments;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
     }
 }

@@ -42,6 +42,9 @@ public class ArticleDto {
     @SerializedName("comments")
     public ArrayList<CommentDto> comments;
 
+    @SerializedName("favourite")
+    public boolean favourite;
+
 
     public ArticleDto(
             @Nullable String id,
@@ -51,7 +54,8 @@ public class ArticleDto {
             @Nullable String username,
             @Nullable Integer likes,
             @Nullable Integer dislikes,
-            @Nullable ArrayList<CommentDto> comments
+            @Nullable ArrayList<CommentDto> comments,
+            boolean favourite
     ) {
         this.id = id;
         this.title = title;
@@ -61,6 +65,7 @@ public class ArticleDto {
         this.likes = likes;
         this.dislikes = dislikes;
         this.comments = comments;
+        this.favourite = favourite;
     }
 
     @Nullable
@@ -99,8 +104,12 @@ public class ArticleDto {
     }
 
     @Nullable
-    public List<CommentDto> getComments() {
+    public ArrayList<CommentDto> getComments() {
         return comments;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
     }
 }
 

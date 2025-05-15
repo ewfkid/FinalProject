@@ -23,13 +23,16 @@ public class ItemArticleEntity {
     @NonNull
     private final Integer dislikes;
 
+    private final boolean favourite;
+
     public ItemArticleEntity(
             @NonNull String id,
             @NonNull String title,
             @NonNull String username,
             @Nullable String photoUrl,
             @NonNull Integer likes,
-            @NonNull Integer dislikes
+            @NonNull Integer dislikes,
+            boolean favourite
     ) {
         this.id = id;
         this.title = title;
@@ -37,6 +40,7 @@ public class ItemArticleEntity {
         this.photoUrl = photoUrl;
         this.likes = likes;
         this.dislikes = dislikes;
+        this.favourite = favourite;
     }
 
     @NonNull
@@ -67,5 +71,9 @@ public class ItemArticleEntity {
     @NonNull
     public Integer getDislikes() {
         return dislikes;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
     }
 }

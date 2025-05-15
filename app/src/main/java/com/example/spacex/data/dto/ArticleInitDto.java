@@ -38,6 +38,9 @@ public class ArticleInitDto {
     @SerializedName("comments")
     public ArrayList<CommentDto> comments;
 
+    @SerializedName("favourite")
+    public boolean favourite;
+
     public ArticleInitDto(
             @NonNull String title,
             @NonNull String content,
@@ -45,7 +48,8 @@ public class ArticleInitDto {
             @Nullable String photoUrl,
             @Nullable Integer likes,
             @Nullable Integer dislikes,
-            @Nullable ArrayList<CommentDto> comments
+            @Nullable ArrayList<CommentDto> comments,
+            boolean favourite
     ) {
         this.title = title;
         this.content = content;
@@ -54,6 +58,7 @@ public class ArticleInitDto {
         this.likes = likes;
         this.dislikes = dislikes;
         this.comments = comments;
+        this.favourite = favourite;
     }
 
     @NonNull
@@ -89,5 +94,9 @@ public class ArticleInitDto {
     @Nullable
     public ArrayList<CommentDto> getComments() {
         return comments;
+    }
+
+    public boolean isFavourite() {
+        return favourite;
     }
 }

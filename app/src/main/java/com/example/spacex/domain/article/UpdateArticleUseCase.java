@@ -28,8 +28,9 @@ public class UpdateArticleUseCase {
             @NonNull Integer likes,
             @NonNull Integer dislikes,
             @Nullable ArrayList<CommentEntity> comments,
+            boolean favourite,
             Consumer<Status<FullArticleEntity>> callback
     ) {
-        repo.update(id, title, content, username, photoUrl, likes, dislikes, comments, callback);
+        repo.update(id, title, content, username, photoUrl, likes, dislikes, comments, favourite, callback);
     }
 }

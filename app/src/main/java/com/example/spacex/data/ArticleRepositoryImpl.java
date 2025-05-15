@@ -51,6 +51,48 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 ArticleMapper::toItemArticleEntityList
         ));
     }
+//    @Override
+//    public void getAllArticles(Consumer<Status<List<ItemArticleEntity>>> callback) {
+//        articleApi.getAllArticles().enqueue(new Callback<List<ArticleDto>>() {
+//            @Override
+//            public void onResponse(Call<List<ArticleDto>> call, Response<List<ArticleDto>> response) {
+//
+//                int statusCode = response.code();
+//
+//                if (response.isSuccessful()) {
+//                    List<ArticleDto> articles = response.body();
+//
+//                    Log.d("API_Response", "Status Code: " + statusCode + ", Received articles: " + articles);
+//
+//                    if (articles != null && !articles.isEmpty()) {
+//
+//                        List<ItemArticleEntity> itemArticles = ArticleMapper.toItemArticleEntityList(articles);
+//
+//                        Log.d("API_Response", "Mapped ItemArticleEntities: " + itemArticles);
+//
+//                        callback.accept(new Status<>(statusCode, itemArticles, null));
+//                    } else {
+//
+//                        Log.e("API_Response", "Received empty list");
+//                        callback.accept(new Status<>(statusCode, new ArrayList<>(), null));
+//                    }
+//                } else {
+//
+//                    Log.e("API_Response", "Error - Status Code: " + statusCode + ", Error: " + response.errorBody());
+//
+//                    callback.accept(new Status<>(statusCode, null, new Throwable("Error response from server")));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<ArticleDto>> call, Throwable t) {
+//
+//                Log.e("API_Response", "Request failed: " + t.getMessage());
+//
+//                callback.accept(new Status<>(-1, null, t));
+//            }
+//        });
+//    }
 
 
     @Override
@@ -62,6 +104,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             @NonNull Integer likes,
             @NonNull Integer dislikes,
             @Nullable ArrayList<CommentEntity> comments,
+            boolean favourite,
             Consumer<Status<Void>> callback
     ) {
         articleApi.createArticle(new ArticleInitDto(
@@ -71,7 +114,8 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 userAvatar,
                 0,
                 0,
-                new ArrayList<>()
+                new ArrayList<>(),
+                false
         )).enqueue(new CallToConsumer<>(
                         callback,
                         dto -> null
@@ -98,6 +142,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
             @NonNull Integer likes,
             @NonNull Integer dislikes,
             @Nullable ArrayList<CommentEntity> comments,
+            boolean favourite,
             Consumer<Status<FullArticleEntity>> callback
     ) {
         ArrayList<CommentDto> commentsDto = null;
@@ -106,7 +151,7 @@ public class ArticleRepositoryImpl implements ArticleRepository {
         }
 
         articleApi.update(
-                id, new ArticleDto(id, title, content, username, photoUrl, likes, dislikes, commentsDto)
+                id, new ArticleDto(id, title, content, username, photoUrl, likes, dislikes, commentsDto, favourite)
         ).enqueue(new CallToConsumer<>(callback, ArticleMapper::toFullArticleEntity));
     }
 

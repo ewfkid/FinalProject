@@ -25,6 +25,7 @@ public interface ArticleRepository {
             @NonNull Integer likes,
             @NonNull Integer dislikes,
             @Nullable ArrayList<CommentEntity> comments,
+            boolean favourite,
             Consumer<Status<Void>> callback
     );
 
@@ -39,6 +40,7 @@ public interface ArticleRepository {
             @NonNull Integer likes,
             @NonNull Integer dislikes,
             @Nullable ArrayList<CommentEntity> comments,
+            boolean favourite,
             Consumer<Status<FullArticleEntity>> callback
     );
 
