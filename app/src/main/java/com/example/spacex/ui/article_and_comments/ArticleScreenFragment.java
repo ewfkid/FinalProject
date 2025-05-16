@@ -35,12 +35,12 @@ public class ArticleScreenFragment extends Fragment {
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.article_section, articleFragment)
-                .commit();
+                .commitNow();
 
         getChildFragmentManager()
                 .beginTransaction()
                 .replace(R.id.comments_section, commentListFragment)
-                .commit();
+                .commitNow();
     }
 
     public static Bundle getBundle(@NonNull String articleId) {

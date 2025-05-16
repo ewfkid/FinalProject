@@ -1,5 +1,6 @@
 package com.example.spacex.data.utils.mapper;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -18,13 +19,15 @@ public class CommentMapper {
         final String username = commentDto.username;
         final String photoUrl = commentDto.photoUrl;
         final String content = commentDto.content;
-        final String userId = commentDto.userId;
+        final String userId = commentDto.userId != null ? commentDto.userId : "";
 
-        if (id != null && articleId != null && username != null && content != null && userId != null) {
+
+        if (id != null && articleId != null && username != null && content != null) {
             return new CommentEntity(id, articleId, username, photoUrl, content, userId);
         }
         return null;
     }
+
 
     @NonNull
     public static ArrayList<CommentEntity> toCommentEntityList(@NonNull List<CommentDto> commentsDto) {

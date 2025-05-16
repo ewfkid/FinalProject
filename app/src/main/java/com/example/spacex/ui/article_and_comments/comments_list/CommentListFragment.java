@@ -35,10 +35,12 @@ public class CommentListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentCommentsListBinding.bind(view);
-        viewModel = new ViewModelProvider(this).get(CommentListViewModel.class);
 
         String articleId = getArguments() != null ? getArguments().getString(KEY_ARTICLE_ID) : null;
         if (articleId == null) throw new IllegalStateException("Article Id cannot be null");
+
+        CommentListViewModelFactory factory = new CommentListViewModelFactory(articleId);
+        viewModel = new ViewModelProvider(this, factory).get(CommentListViewModel.class);
 
         CommentListAdapter adapter = new CommentListAdapter();
         binding.recycler.setAdapter(adapter);

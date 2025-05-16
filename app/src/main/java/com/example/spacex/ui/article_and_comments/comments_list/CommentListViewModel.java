@@ -1,5 +1,7 @@
 package com.example.spacex.ui.article_and_comments.comments_list;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -35,6 +37,8 @@ public class CommentListViewModel extends ViewModel {
     }
 
     private State fromStatus(Status<List<CommentEntity>> status) {
+        List<CommentEntity> comments = status.getValue();
+
         return new State(
                 status.getError() != null ? status.getError().getLocalizedMessage() : null,
                 status.getValue(),

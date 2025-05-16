@@ -89,7 +89,7 @@
             app:argType="string"/>
     </fragment>
 
-
+    <!-- multiline
     <fragment
         android:id="@+id/commentListFragment"
         android:name="com.example.spacex.ui.article_and_comments.comments_list.CommentListFragment"
@@ -103,7 +103,7 @@
         android:label="ArticleFragment"
         tools:layout="@layout/fragment_article">
 
-    </fragment>
+    </fragment>-->
 
     <fragment
         android:id="@+id/articleScreenFragment"
