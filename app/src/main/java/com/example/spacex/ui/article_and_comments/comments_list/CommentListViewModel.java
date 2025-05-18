@@ -1,14 +1,12 @@
 package com.example.spacex.ui.article_and_comments.comments_list;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.spacex.data.CommentRepositoryImpl;
+import com.example.spacex.data.repository.CommentRepositoryImpl;
 import com.example.spacex.domain.comment.GetCommentListUseCase;
 import com.example.spacex.domain.entity.CommentEntity;
 import com.example.spacex.domain.entity.Status;

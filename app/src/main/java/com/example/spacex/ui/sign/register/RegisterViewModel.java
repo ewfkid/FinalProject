@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.spacex.data.UserRepositoryImpl;
+import com.example.spacex.data.repository.UserRepositoryImpl;
 import com.example.spacex.domain.sign.CreateUserUseCase;
 import com.example.spacex.domain.sign.IsUserExistUseCase;
 

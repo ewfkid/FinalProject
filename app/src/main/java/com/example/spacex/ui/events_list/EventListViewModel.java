@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.spacex.data.EventRepositoryImpl;
+import com.example.spacex.data.repository.EventRepositoryImpl;
 import com.example.spacex.domain.event.GetEventListUseCase;
 import com.example.spacex.domain.entity.ItemEventEntity;
 import com.example.spacex.domain.entity.Status;

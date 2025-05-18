@@ -1,4 +1,4 @@
-package com.example.spacex.data;
+package com.example.spacex.data.repository;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

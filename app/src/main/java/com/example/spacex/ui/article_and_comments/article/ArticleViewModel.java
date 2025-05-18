@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.spacex.data.ArticleRepositoryImpl;
+import com.example.spacex.data.repository.ArticleRepositoryImpl;
 import com.example.spacex.domain.article.GetArticleByIdUseCase;
 import com.example.spacex.domain.entity.FullArticleEntity;
 import com.example.spacex.domain.entity.Status;

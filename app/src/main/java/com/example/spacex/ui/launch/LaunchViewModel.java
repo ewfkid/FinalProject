@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.spacex.data.LaunchRepositoryImpl;
+import com.example.spacex.data.repository.LaunchRepositoryImpl;
 import com.example.spacex.domain.entity.FullLaunchEntity;
 import com.example.spacex.domain.entity.Status;
 import com.example.spacex.domain.launch.GetLaunchByFlightNumberUseCase;
