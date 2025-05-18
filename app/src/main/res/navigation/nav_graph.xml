@@ -108,7 +108,11 @@
         android:id="@+id/createArticleFragment"
         android:name="com.example.spacex.ui.create_article.CreateArticleFragment"
         android:label="CreateArticleFragment"
-        tools:layout="@layout/fragment_create_article"/>
+        tools:layout="@layout/fragment_create_article">
+        <action
+            android:id="@+id/action_createArticleFragment_to_articlesListFragment"
+            app:destination="@id/articlesListFragment" />
+    </fragment>
 
 
 </navigation>

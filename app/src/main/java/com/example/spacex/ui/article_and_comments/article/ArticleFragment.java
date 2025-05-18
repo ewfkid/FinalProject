@@ -45,6 +45,10 @@ public class ArticleFragment extends Fragment {
 
         viewModel.load(articleId);
         subscribe(viewModel);
+
+        binding.likeButton.setOnClickListener(v -> viewModel.like());
+        binding.dislikeButton.setOnClickListener(v -> viewModel.dislike());
+        binding.favouritesButton.setOnClickListener(v -> viewModel.addToFavourites());
     }
 
     private void subscribe(final ArticleViewModel viewModel) {

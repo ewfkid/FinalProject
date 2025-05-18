@@ -8,7 +8,6 @@ import com.example.spacex.domain.entity.FullArticleEntity;
 import com.example.spacex.domain.entity.Status;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class UpdateArticleUseCase {
