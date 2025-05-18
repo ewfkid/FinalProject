@@ -1,6 +1,7 @@
 package com.example.spacex.data.source;
 
 import com.example.spacex.data.dto.AccountDto;
+import com.example.spacex.data.dto.UserDto;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -18,4 +19,7 @@ public interface UserApi {
 
     @GET("/api/person/login")
     Call<Void> login();
+
+    @GET("/api/person/{id}")
+    Call<UserDto> getUserById(@Path("id") String id);
 }

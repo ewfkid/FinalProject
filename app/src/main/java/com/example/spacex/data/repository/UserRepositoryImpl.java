@@ -7,12 +7,15 @@ import com.example.spacex.data.network.RetrofitFactory;
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.UserApi;
 import com.example.spacex.data.utils.CallToConsumer;
+import com.example.spacex.data.utils.mapper.UserMapper;
 import com.example.spacex.domain.entity.Status;
+import com.example.spacex.domain.entity.UserEntity;
 import com.example.spacex.domain.sign.SignRepository;
+import com.example.spacex.domain.user.UserRepository;
 
 import java.util.function.Consumer;
 
-public class UserRepositoryImpl implements SignRepository {
+public class UserRepositoryImpl implements SignRepository, UserRepository {
 
     private static UserRepositoryImpl INSTANCE;
 
@@ -65,5 +68,13 @@ public class UserRepositoryImpl implements SignRepository {
     @Override
     public void logout() {
         credentialsDataSource.logout();
+    }
+
+    @Override
+    public void getUser(@NonNull String id, Consumer<Status<UserEntity>> callback) {
+        userApi.getUserById(id).enqueue(new CallToConsumer<>(
+                callback,
+                UserMapper::toUserEntity
+        ));
     }
 }
