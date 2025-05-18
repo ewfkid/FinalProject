@@ -24,4 +24,9 @@
     <string name="article">Article</string>
     <string name="reddit">Reddit</string>
     <string name="add_article">add article</string>
+    <string name="save">Save</string>
+    <string name="title_create_article">Create your article</string>
+    <string name="cheer_title">Become an author of your own article!</string>
+    <string name="title_hint">Title</string>
+    <string name="content_hint">Content</string>
 </resources>

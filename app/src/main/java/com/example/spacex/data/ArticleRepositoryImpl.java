@@ -1,7 +1,5 @@
 package com.example.spacex.data;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -22,10 +20,6 @@ import com.example.spacex.domain.entity.Status;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class ArticleRepositoryImpl implements ArticleRepository {
@@ -51,49 +45,6 @@ public class ArticleRepositoryImpl implements ArticleRepository {
                 ArticleMapper::toItemArticleEntityList
         ));
     }
-//    @Override
-//    public void getAllArticles(Consumer<Status<List<ItemArticleEntity>>> callback) {
-//        articleApi.getAllArticles().enqueue(new Callback<List<ArticleDto>>() {
-//            @Override
-//            public void onResponse(Call<List<ArticleDto>> call, Response<List<ArticleDto>> response) {
-//
-//                int statusCode = response.code();
-//
-//                if (response.isSuccessful()) {
-//                    List<ArticleDto> articles = response.body();
-//
-//                    Log.d("API_Response", "Status Code: " + statusCode + ", Received articles: " + articles);
-//
-//                    if (articles != null && !articles.isEmpty()) {
-//
-//                        List<ItemArticleEntity> itemArticles = ArticleMapper.toItemArticleEntityList(articles);
-//
-//                        Log.d("API_Response", "Mapped ItemArticleEntities: " + itemArticles);
-//
-//                        callback.accept(new Status<>(statusCode, itemArticles, null));
-//                    } else {
-//
-//                        Log.e("API_Response", "Received empty list");
-//                        callback.accept(new Status<>(statusCode, new ArrayList<>(), null));
-//                    }
-//                } else {
-//
-//                    Log.e("API_Response", "Error - Status Code: " + statusCode + ", Error: " + response.errorBody());
-//
-//                    callback.accept(new Status<>(statusCode, null, new Throwable("Error response from server")));
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<ArticleDto>> call, Throwable t) {
-//
-//                Log.e("API_Response", "Request failed: " + t.getMessage());
-//
-//                callback.accept(new Status<>(-1, null, t));
-//            }
-//        });
-//    }
-
 
     @Override
     public void createArticle(

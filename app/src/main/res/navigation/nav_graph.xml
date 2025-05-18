@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_articlesListFragment_to_articleScreenFragment"
             app:destination="@id/articleScreenFragment" />
+        <action
+            android:id="@+id/action_articlesListFragment_to_createArticleFragment"
+            app:destination="@id/createArticleFragment" />
     </fragment>
 
     <fragment
@@ -89,22 +92,6 @@
             app:argType="string"/>
     </fragment>
 
-    <!-- multiline
-    <fragment
-        android:id="@+id/commentListFragment"
-        android:name="com.example.spacex.ui.article_and_comments.comments_list.CommentListFragment"
-        android:label="CommentListFragment"
-        tools:layout="@layout/fragment_comments_list">
-    </fragment>
-
-    <fragment
-        android:id="@+id/articleFragment"
-        android:name="com.example.spacex.ui.article_and_comments.article.ArticleFragment"
-        android:label="ArticleFragment"
-        tools:layout="@layout/fragment_article">
-
-    </fragment>-->
-
     <fragment
         android:id="@+id/articleScreenFragment"
         android:name="com.example.spacex.ui.article_and_comments.ArticleScreenFragment"
@@ -117,6 +104,11 @@
             app:argType="string"/>
 
     </fragment>
+    <fragment
+        android:id="@+id/createArticleFragment"
+        android:name="com.example.spacex.ui.create_article.CreateArticleFragment"
+        android:label="CreateArticleFragment"
+        tools:layout="@layout/fragment_create_article"/>
 
 
 </navigation>

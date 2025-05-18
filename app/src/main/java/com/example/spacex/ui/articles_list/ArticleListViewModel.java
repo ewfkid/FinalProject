@@ -17,7 +17,6 @@ import java.util.List;
 public class ArticleListViewModel extends ViewModel {
 
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
-
     public final LiveData<State> stateLiveData = mutableLiveData;
 
     // ** UseCases ** //

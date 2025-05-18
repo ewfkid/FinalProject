@@ -44,7 +44,7 @@ public class ArticleListFragment extends Fragment {
             binding.recycler.setVisibility(Utils.visibleOrGone(isSuccess));
             binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             binding.loading.setVisibility(Utils.visibleOrGone(state.isLoading()));
-
+            binding.addArticleButton.setOnClickListener(v -> openCreateArticleFragment());
             binding.error.setText(state.getErrorMessage());
             if (isSuccess) {
                 adapter.updateData(state.getItems());
@@ -58,6 +58,14 @@ public class ArticleListFragment extends Fragment {
         Navigation.findNavController(view).navigate(
                 R.id.action_articlesListFragment_to_articleScreenFragment,
                 ArticleScreenFragment.getBundle(articleId)
+        );
+    }
+
+    private void openCreateArticleFragment(){
+        View view = getView();
+        if (view == null) return;
+        Navigation.findNavController(view).navigate(
+                R.id.action_articlesListFragment_to_createArticleFragment
         );
     }
 
