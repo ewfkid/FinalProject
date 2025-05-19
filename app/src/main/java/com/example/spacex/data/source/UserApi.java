@@ -18,7 +18,7 @@ public interface UserApi {
     Call<Void> register(@Body AccountDto dto);
 
     @GET("/api/person/login")
-    Call<Void> login();
+    Call<UserDto> login();
 
     @GET("/api/person/{id}")
     Call<UserDto> getUserById(@Path("id") String id);

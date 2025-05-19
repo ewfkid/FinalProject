@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.spacex.data.repository.UserRepositoryImpl;
+import com.example.spacex.domain.entity.UserEntity;
 import com.example.spacex.domain.sign.IsUserExistUseCase;
 import com.example.spacex.domain.sign.LoginUserUseCase;
 
@@ -82,7 +83,16 @@ public class LoginViewModel extends AndroidViewModel {
     private void loginUser(@NonNull final String currentUsername, @NonNull final String currentPassword) {
         loginUserUseCase.execute(currentUsername, currentPassword, status -> {
             if (status.getStatusCode() == 200 && status.getError() == null) {
-                saveUserData(currentUsername, currentPassword);
+                UserEntity user = status.getValue();
+                if (user != null) {
+                    saveUserData(currentUsername, currentPassword);
+                    saveUserId(user.getId());
+                    saveUserPhoto(user.getPhotoUrl());
+                    saveUserLoggedIn(true);
+                    mutableOpenEventsLiveData.postValue(true);
+                } else {
+                    mutableErrorLiveData.postValue("Something went wrong. Try again later");
+                }
                 saveUserLoggedIn(true);
                 mutableOpenEventsLiveData.postValue(true);
             } else {
@@ -95,6 +105,18 @@ public class LoginViewModel extends AndroidViewModel {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("username", username);
         editor.putString("password", password);
+        editor.apply();
+    }
+
+    private void saveUserId(String userId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userId", userId);
+        editor.apply();
+    }
+
+    private void saveUserPhoto(String photoUrl) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("photoUrl", photoUrl);
         editor.apply();
     }
 

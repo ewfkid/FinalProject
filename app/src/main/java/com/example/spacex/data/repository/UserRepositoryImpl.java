@@ -56,12 +56,12 @@ public class UserRepositoryImpl implements SignRepository, UserRepository {
     }
 
     @Override
-    public void login(@NonNull String username, @NonNull String password, Consumer<Status<Void>> callback) {
+    public void login(@NonNull String username, @NonNull String password, Consumer<Status<UserEntity>> callback) {
         credentialsDataSource.updateLogin(username, password);
         userApi = RetrofitFactory.getInstance().getUserApi();
         userApi.login().enqueue(new CallToConsumer<>(
                 callback,
-                dto -> null
+                UserMapper::toUserEntity
         ));
     }
 

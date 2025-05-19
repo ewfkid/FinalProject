@@ -1,6 +1,8 @@
 package com.example.spacex.ui.profile;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -11,6 +13,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentProfileBinding;
+import com.example.spacex.domain.entity.UserEntity;
+import com.example.spacex.ui.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment {
 
@@ -18,7 +23,7 @@ public class ProfileFragment extends Fragment {
 
     private ProfileViewModel viewModel;
 
-    public ProfileFragment(){
+    public ProfileFragment() {
         super(R.layout.fragment_profile);
     }
 
@@ -27,7 +32,41 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentProfileBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        subscribe(viewModel);
+        viewModel.load(getUserId());
     }
+
+    private String getUserId() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        return prefs.getString("userId", null);
+    }
+
+
+    private void subscribe(final ProfileViewModel viewModel) {
+        viewModel.stateLiveData.observe(getViewLifecycleOwner(), state -> {
+            boolean isSuccess = !state.isLoading()
+                    && state.getErrorMessage() == null
+                    && state.getUser() != null;
+
+            binding.progressbar.setVisibility(Utils.visibleOrGone(state.isLoading()));
+            binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
+            binding.error.setText(state.getErrorMessage());
+            binding.constraintParent.setVisibility(Utils.visibleOrGone(isSuccess));
+            if (isSuccess) {
+                UserEntity user = state.getUser();
+                binding.name.setText(user.getName());
+                binding.phone.setText(user.getPhone());
+                binding.username.setText(user.getUsername());
+                binding.email.setText(user.getEmail());
+                if (user.getPhotoUrl() != null) {
+                    Picasso.get().load(user.getPhotoUrl()).into(binding.userImage);
+                } else {
+                    binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onDestroyView() {
