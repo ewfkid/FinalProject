@@ -9,6 +9,7 @@ import com.example.spacex.domain.entity.FullArticleEntity;
 import com.example.spacex.domain.entity.ItemArticleEntity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ArticleMapper {
@@ -30,7 +31,9 @@ public class ArticleMapper {
     }
 
     @NonNull
-    public static List<ItemArticleEntity> toItemArticleEntityList(@NonNull List<ArticleDto> articlesDto) {
+    public static List<ItemArticleEntity> toItemArticleEntityList(@Nullable List<ArticleDto> articlesDto) {
+        if (articlesDto == null) return Collections.emptyList();
+
         List<ItemArticleEntity> result = new ArrayList<>(articlesDto.size());
         for (ArticleDto article : articlesDto) {
             ItemArticleEntity item = toItemArticleEntity(article);
@@ -40,6 +43,7 @@ public class ArticleMapper {
         }
         return result;
     }
+
 
     @Nullable
     public static FullArticleEntity toFullArticleEntity(@NonNull ArticleDto articleDto) {

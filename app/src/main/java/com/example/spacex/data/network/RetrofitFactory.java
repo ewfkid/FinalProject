@@ -4,6 +4,7 @@ import com.example.spacex.data.source.ArticleApi;
 import com.example.spacex.data.source.CommentApi;
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.EventApi;
+import com.example.spacex.data.source.FavouritesApi;
 import com.example.spacex.data.source.LaunchApi;
 import com.example.spacex.data.source.UserApi;
 
@@ -70,6 +71,10 @@ public class RetrofitFactory {
 
     public CommentApi getCommentApi() {
         return retrofitUser.create(CommentApi.class);
+    }
+
+    public FavouritesApi getFavouritesApi() {
+        return retrofitUser.create(FavouritesApi.class);
     }
 
 }

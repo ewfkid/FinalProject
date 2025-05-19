@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentProfileBinding;
@@ -60,6 +61,7 @@ public class ProfileFragment extends Fragment {
                 binding.username.setText(user.getUsername());
                 binding.email.setText(user.getEmail());
                 binding.linearLogout.setOnClickListener(v -> viewModel.logout());
+                binding.linearFavourites.setOnClickListener(v -> viewFavourites());
                 if (user.getPhotoUrl() != null) {
                     Picasso.get().load(user.getPhotoUrl()).into(binding.userImage);
                 } else {
@@ -70,6 +72,14 @@ public class ProfileFragment extends Fragment {
         viewModel.logoutLiveData.observe(getViewLifecycleOwner(), unused -> {
             ((MyNavigator) requireActivity()).onLogout();
         });
+    }
+
+    private void viewFavourites() {
+        View view = getView();
+        if (view == null) return;
+        Navigation.findNavController(view).navigate(
+                R.id.action_profileFragment_to_favouritesListFragment
+        );
     }
 
 

@@ -67,6 +67,9 @@
         <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_favouritesListFragment"
+            app:destination="@id/favouritesListFragment" />
     </fragment>
 
     <fragment
@@ -116,6 +119,15 @@
         <action
             android:id="@+id/action_createArticleFragment_to_articlesListFragment"
             app:destination="@id/articlesListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favouritesListFragment"
+        android:name="com.example.spacex.ui.favourites_list.FavouritesListFragment"
+        android:label="FavouritesListFragment"
+        tools:layout="@layout/fragment_favourites_list">
+        <action
+            android:id="@+id/action_favouritesListFragment_to_articleScreenFragment"
+            app:destination="@id/articleScreenFragment" />
     </fragment>
 
 

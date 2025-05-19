@@ -1,4 +1,4 @@
-package com.example.spacex.ui.articles_list;
+package com.example.spacex.ui.favourites_list;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -15,21 +15,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ViewHolder> {
+public class FavouritesListAdapter extends  RecyclerView.Adapter<FavouritesListAdapter.ViewHolder>{
+
 
     @NonNull
     private final Consumer<String> onItemClick;
 
     private final List<ItemArticleEntity> data = new ArrayList<>();
 
-    public ArticleListAdapter(@NonNull Consumer<String> onItemClick) {
+    public FavouritesListAdapter(@NonNull Consumer<String> onItemClick) {
         this.onItemClick = onItemClick;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(
+        return new FavouritesListAdapter.ViewHolder(
                 ItemArticleBinding.inflate(
                         LayoutInflater.from(parent.getContext()),
                         parent,
@@ -43,15 +44,15 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
         holder.bind(data.get(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
-
     public void updateData(List<ItemArticleEntity> newData) {
         data.clear();
         data.addAll(newData);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,27 +65,21 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             this.binding = binding;
         }
 
-        public void bind(ItemArticleEntity item) {
+        public void bind(ItemArticleEntity item){
             binding.articleTitle.setText(item.getTitle());
             binding.userNickname.setText(item.getUsername());
             binding.amountOfDislikes.setText(item.getDislikes().toString());
-            binding.amountOfLikes.setText(item.getLikes().toString());
+            binding.amountOfLikes.setText(item.getDislikes().toString());
             if (item.getPhotoUrl() != null) {
                 Picasso.get().load(item.getPhotoUrl()).into(binding.userImage);
             } else {
                 binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
             }
-
-            binding.dislikeButton.setOnClickListener(v -> {
-                // TODO
-            });
-            binding.likeButton.setOnClickListener(v -> {
-                // TODO
-            });
+            binding.dislikeButton.setOnClickListener(v -> {});
+            binding.likeButton.setOnClickListener(v -> {});
             binding.getRoot().setOnClickListener(v -> {
                 onItemClick.accept(item.getId());
             });
         }
-
     }
 }
