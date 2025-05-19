@@ -127,6 +127,7 @@ public class LoginViewModel extends AndroidViewModel {
         editor.apply();
     }
 
+
     public boolean isUserLoggedIn() {
         return sharedPreferences.getBoolean("isLoggedIn", false);
     }

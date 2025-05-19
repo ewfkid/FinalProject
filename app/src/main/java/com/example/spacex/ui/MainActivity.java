@@ -65,8 +65,11 @@ public class MainActivity extends AppCompatActivity implements MyNavigator {
 
     @Override
     public void onLogout() {
-        navController.navigate(R.id.action_profileFragment_to_loginFragment);
-        navController.clearBackStack(R.id.action_profileFragment_to_loginFragment);
+        getSharedPreferences("user_prefs", MODE_PRIVATE)
+                .edit()
+                .clear()
+                .apply();
+        navController.navigate(R.id.loginFragment);
     }
 
 }
