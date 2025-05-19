@@ -9,7 +9,9 @@ import com.example.spacex.domain.entity.UserEntity;
 public class UserMapper {
 
     @Nullable
-    public static UserEntity toUserEntity(@NonNull UserDto userDto) {
+    public static UserEntity toUserEntity(@Nullable UserDto userDto) {
+        if (userDto == null) return null;
+
         final String id = userDto.id;
         final String phone = userDto.phone;
         final String name = userDto.name;
@@ -27,7 +29,8 @@ public class UserMapper {
                     photoUrl
             );
         }
+
         return null;
     }
-
 }
+

@@ -11,9 +11,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.ActivityMainBinding;
+import com.example.spacex.ui.utils.MyNavigator;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MyNavigator {
 
     private ActivityMainBinding binding;
 
@@ -60,6 +61,12 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+    }
+
+    @Override
+    public void onLogout() {
+        navController.navigate(R.id.action_profileFragment_to_loginFragment);
+        navController.clearBackStack(R.id.action_profileFragment_to_loginFragment);
     }
 
 }

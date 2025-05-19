@@ -91,12 +91,13 @@ public class LoginViewModel extends AndroidViewModel {
                     saveUserLoggedIn(true);
                     mutableOpenEventsLiveData.postValue(true);
                 } else {
-                    mutableErrorLiveData.postValue("Something went wrong. Try again later");
+                    mutableErrorLiveData.postValue("Invalid username or password");
                 }
-                saveUserLoggedIn(true);
-                mutableOpenEventsLiveData.postValue(true);
+            } else if (status.getStatusCode() == 401) {
+                mutableErrorLiveData.postValue("Invalid password");
             } else {
-                mutableErrorLiveData.postValue("Something went wrong. Try again later");
+                String errorMessage = status.getError() != null ? status.getError().getMessage() : "Something went wrong. Try again later";
+                mutableErrorLiveData.postValue(errorMessage);
             }
         });
     }

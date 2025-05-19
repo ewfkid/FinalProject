@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentProfileBinding;
 import com.example.spacex.domain.entity.UserEntity;
+import com.example.spacex.ui.utils.MyNavigator;
 import com.example.spacex.ui.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -58,12 +59,16 @@ public class ProfileFragment extends Fragment {
                 binding.phone.setText(user.getPhone());
                 binding.username.setText(user.getUsername());
                 binding.email.setText(user.getEmail());
+                binding.linearLogout.setOnClickListener(v -> viewModel.logout());
                 if (user.getPhotoUrl() != null) {
                     Picasso.get().load(user.getPhotoUrl()).into(binding.userImage);
                 } else {
                     binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
                 }
             }
+        });
+        viewModel.logoutLiveData.observe(getViewLifecycleOwner(), unused -> {
+            ((MyNavigator) requireActivity()).onLogout();
         });
     }
 

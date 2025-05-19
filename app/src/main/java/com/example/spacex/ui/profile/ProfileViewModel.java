@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.spacex.data.repository.UserRepositoryImpl;
 import com.example.spacex.domain.entity.Status;
 import com.example.spacex.domain.entity.UserEntity;
+import com.example.spacex.domain.sign.LogoutUseCase;
 import com.example.spacex.domain.user.GetUserByIdUseCase;
 
 public class ProfileViewModel extends ViewModel {
@@ -16,9 +17,18 @@ public class ProfileViewModel extends ViewModel {
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableLiveData;
 
+    private final MutableLiveData<Void> mutableLogoutLiveData = new MutableLiveData<>();
+    public final LiveData<Void> logoutLiveData = mutableLogoutLiveData;
+
+    /* UseCases */
     private final GetUserByIdUseCase getUserByIdUseCase = new GetUserByIdUseCase(
             UserRepositoryImpl.getInstance()
     );
+
+    private final LogoutUseCase logoutUseCase = new LogoutUseCase(
+            UserRepositoryImpl.getInstance()
+    );
+    /* UseCases */
 
     private State fromStatus(Status<UserEntity> status) {
         return new State(
@@ -33,6 +43,11 @@ public class ProfileViewModel extends ViewModel {
         getUserByIdUseCase.execute(id, status -> {
             mutableLiveData.postValue(fromStatus(status));
         });
+    }
+
+    public void logout() {
+        logoutUseCase.execute();
+        mutableLogoutLiveData.postValue(null);
     }
 
     public class State{
