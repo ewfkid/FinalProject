@@ -56,6 +56,8 @@ public class CreateArticleViewModel extends AndroidViewModel {
 
         String username = sharedPreferences.getString("username", null);
 
+        String photoUrl = sharedPreferences.getString("photoUrl", null);
+
         if (username == null) {
             mutableErrorLiveData.postValue("User not logged in");
             return;
@@ -65,7 +67,7 @@ public class CreateArticleViewModel extends AndroidViewModel {
                 title,
                 content,
                 username,
-                null,
+                photoUrl,
                 0,
                 0,
                 new ArrayList<>(),
