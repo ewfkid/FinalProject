@@ -57,7 +57,11 @@ public class ProfileFragment extends Fragment {
             if (isSuccess) {
                 UserEntity user = state.getUser();
                 binding.name.setText(user.getName());
-                binding.phone.setText(user.getPhone());
+                if (user.getPhone() != null){
+                    binding.phone.setText(user.getPhone());
+                } else {
+                    binding.phone.setText(R.string.you_havent_add_your_phone_number_yet);
+                }
                 binding.username.setText(user.getUsername());
                 binding.email.setText(user.getEmail());
                 binding.linearLogout.setOnClickListener(v -> viewModel.logout());
