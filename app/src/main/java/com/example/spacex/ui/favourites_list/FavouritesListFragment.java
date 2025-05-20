@@ -37,20 +37,30 @@ public class FavouritesListFragment extends Fragment {
 
     private void subscribe(final FavouritesListViewModel viewModel, FavouritesListAdapter adapter){
         viewModel.stateLiveData.observe(getViewLifecycleOwner(), state -> {
-            boolean isSuccess = !state.isLoading()
-                    && state.getErrorMessage() == null
-                    && state.getItems() != null;
+            boolean hasItems = state.getItems() != null && !state.getItems().isEmpty();
+            boolean isSuccess = !state.isLoading() && state.getErrorMessage() == null && state.getItems() != null;
+
             binding.refresh.setEnabled(!state.isLoading());
             if (!state.isLoading()) binding.refresh.setRefreshing(false);
-            binding.recycler.setVisibility(Utils.visibleOrGone(isSuccess));
-            binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
+
+            binding.recycler.setVisibility(Utils.visibleOrGone(hasItems));
+
+            if (isSuccess && !hasItems) {
+                binding.error.setVisibility(View.VISIBLE);
+                binding.error.setText(R.string.no_articles_in_favourites_yet);
+            } else {
+                binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
+                binding.error.setText(state.getErrorMessage());
+            }
+
             binding.loading.setVisibility(Utils.visibleOrGone(state.isLoading()));
-            binding.error.setText(state.getErrorMessage());
-            if (isSuccess) {
+
+            if (hasItems) {
                 adapter.updateData(state.getItems());
             }
         });
     }
+
 
     private void viewArticle(@NonNull String articleId) {
         View view = getView();
