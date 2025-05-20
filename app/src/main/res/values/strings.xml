@@ -38,4 +38,6 @@
     <string name="favourites">Favourites</string>
     <string name="you_havent_add_your_phone_number_yet">You havent add your phone number yet</string>
     <string name="no_articles_in_favourites_yet">No articles in Favourites yet</string>
+    <string name="my_account">My account</string>
+    <string name="hint_phone">Phone</string>
 </resources>

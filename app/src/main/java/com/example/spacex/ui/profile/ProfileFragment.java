@@ -15,6 +15,7 @@ import androidx.navigation.Navigation;
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentProfileBinding;
 import com.example.spacex.domain.entity.UserEntity;
+import com.example.spacex.ui.update_profile.UpdateProfileFragment;
 import com.example.spacex.ui.utils.MyNavigator;
 import com.example.spacex.ui.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -71,11 +72,21 @@ public class ProfileFragment extends Fragment {
                 } else {
                     binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
                 }
+                binding.constraintProfile.setOnClickListener(v -> viewUpdateFragment(getUserId()));
             }
         });
         viewModel.logoutLiveData.observe(getViewLifecycleOwner(), unused -> {
             ((MyNavigator) requireActivity()).onLogout();
         });
+    }
+
+    private void viewUpdateFragment(@NonNull String id) {
+        View view = getView();
+        if (view == null) return;
+        Navigation.findNavController(view).navigate(
+                R.id.action_profileFragment_to_updateProfileFragment,
+                UpdateProfileFragment.getBundle(id)
+        );
     }
 
     private void viewFavourites() {

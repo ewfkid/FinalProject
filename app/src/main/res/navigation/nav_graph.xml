@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_profileFragment_to_favouritesListFragment"
             app:destination="@id/favouritesListFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
     </fragment>
 
     <fragment
@@ -128,6 +131,17 @@
         <action
             android:id="@+id/action_favouritesListFragment_to_articleScreenFragment"
             app:destination="@id/articleScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateProfileFragment"
+        android:name="com.example.spacex.ui.update_profile.UpdateProfileFragment"
+        android:label="UpdateProfileFragment"
+        tools:layout="@layout/fragment_update_profile">
+        <argument
+            android:name="id"
+            android:defaultValue="0"
+            app:nullable="false"
+            app:argType="string"/>
     </fragment>
 
 

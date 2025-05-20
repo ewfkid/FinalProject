@@ -1,12 +1,14 @@
 package com.example.spacex.data.repository;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.spacex.data.dto.AccountDto;
 import com.example.spacex.data.network.RetrofitFactory;
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.UserApi;
 import com.example.spacex.data.utils.CallToConsumer;
+import com.example.spacex.data.utils.container.UserContainer;
 import com.example.spacex.data.utils.mapper.UserMapper;
 import com.example.spacex.domain.entity.Status;
 import com.example.spacex.domain.entity.UserEntity;
@@ -23,7 +25,8 @@ public class UserRepositoryImpl implements SignRepository, UserRepository {
 
     private final CredentialsDataSource credentialsDataSource = CredentialsDataSource.getInstance();
 
-    private UserRepositoryImpl() {}
+    private UserRepositoryImpl() {
+    }
 
     public static synchronized UserRepositoryImpl getInstance() {
         if (INSTANCE == null) {
@@ -75,6 +78,22 @@ public class UserRepositoryImpl implements SignRepository, UserRepository {
         userApi.getUserById(id).enqueue(new CallToConsumer<>(
                 callback,
                 UserMapper::toUserEntity
+        ));
+    }
+
+    @Override
+    public void updateUser(
+            @NonNull String id,
+            @NonNull String name,
+            @NonNull String username,
+            @NonNull String email,
+            @Nullable String phone,
+            @Nullable String photoUrl,
+            Consumer<Status<Void>> callback
+    ) {
+        userApi.updateUserById(id, new UserContainer(name, username, photoUrl, phone, email)).enqueue(new CallToConsumer<>(
+                callback,
+                dto -> null
         ));
     }
 }

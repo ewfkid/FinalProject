@@ -2,11 +2,13 @@ package com.example.spacex.data.source;
 
 import com.example.spacex.data.dto.AccountDto;
 import com.example.spacex.data.dto.UserDto;
+import com.example.spacex.data.utils.container.UserContainer;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface UserApi {
@@ -22,4 +24,7 @@ public interface UserApi {
 
     @GET("/api/person/{id}")
     Call<UserDto> getUserById(@Path("id") String id);
+
+    @PUT("/api/person{id}")
+    Call<Void> updateUserById(@Path("id") String id, @Body UserContainer userData);
 }
