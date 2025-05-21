@@ -120,7 +120,10 @@ public class UpdateProfileViewModel extends ViewModel {
                         currentUser = updatedUser;
 
                         mutableOpenProfileLiveData.postValue(null);
-                    } else {
+                    } else if(status.getStatusCode() == 500){
+                        mutableStateLiveData.postValue(new State("Email or phone is already used", null, false));
+                    }
+                    else {
                         mutableStateLiveData.postValue(new State("Failed to save. Try again later", null, false));
                     }
                 }
