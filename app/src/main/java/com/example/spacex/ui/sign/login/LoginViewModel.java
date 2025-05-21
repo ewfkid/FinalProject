@@ -26,20 +26,11 @@ public class LoginViewModel extends AndroidViewModel {
     public final LiveData<Boolean> openEventsLiveData = mutableOpenEventsLiveData;
 
     /* UseCases */
-
-    private final IsUserExistUseCase isUserExistUseCase = new IsUserExistUseCase(
-            UserRepositoryImpl.getInstance()
-    );
-
-    private final LoginUserUseCase loginUserUseCase = new LoginUserUseCase(
-            UserRepositoryImpl.getInstance()
-    );
-
+    private final IsUserExistUseCase isUserExistUseCase = new IsUserExistUseCase(UserRepositoryImpl.getInstance());
+    private final LoginUserUseCase loginUserUseCase = new LoginUserUseCase(UserRepositoryImpl.getInstance());
     /* UseCases */
 
-
     private String username;
-
     private String password;
 
     private final SharedPreferences sharedPreferences;
@@ -47,6 +38,7 @@ public class LoginViewModel extends AndroidViewModel {
     public LoginViewModel(@NonNull Application application) {
         super(application);
         sharedPreferences = application.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        loadSavedUser();
     }
 
     public void changeUsername(@NonNull String username) {
@@ -86,9 +78,7 @@ public class LoginViewModel extends AndroidViewModel {
                 UserEntity user = status.getValue();
                 if (user != null) {
                     saveUserData(currentUsername, currentPassword);
-                    saveUserId(user.getId());
-                    saveUserPhoto(user.getPhotoUrl());
-                    saveUserLoggedIn(true);
+                    saveFullUserData(user);
                     mutableOpenEventsLiveData.postValue(true);
                 } else {
                     mutableErrorLiveData.postValue("Invalid username or password");
@@ -96,7 +86,9 @@ public class LoginViewModel extends AndroidViewModel {
             } else if (status.getStatusCode() == 401) {
                 mutableErrorLiveData.postValue("Invalid password");
             } else {
-                String errorMessage = status.getError() != null ? status.getError().getMessage() : "Something went wrong. Try again later";
+                String errorMessage = status.getError() != null
+                        ? status.getError().getMessage()
+                        : "Something went wrong. Try again later";
                 mutableErrorLiveData.postValue(errorMessage);
             }
         });
@@ -110,25 +102,39 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     private void saveUserId(String userId) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("userId", userId);
-        editor.apply();
+        sharedPreferences.edit().putString("userId", userId).apply();
     }
 
     private void saveUserPhoto(String photoUrl) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("photoUrl", photoUrl);
-        editor.apply();
+        sharedPreferences.edit().putString("photoUrl", photoUrl).apply();
     }
 
     private void saveUserLoggedIn(boolean isLoggedIn) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isLoggedIn", isLoggedIn);
-        editor.apply();
+        sharedPreferences.edit().putBoolean("isLoggedIn", isLoggedIn).apply();
     }
 
+    public void saveFullUserData(@NonNull UserEntity user) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("userId", user.getId());
+        editor.putString("name", user.getName());
+        editor.putString("username", user.getUsername());
+        editor.putString("email", user.getEmail());
+        editor.putString("phone", user.getPhone());
+        editor.putString("photoUrl", user.getPhotoUrl());
+        editor.putBoolean("isLoggedIn", true);
+        editor.apply();
+
+        this.username = user.getUsername();
+    }
 
     public boolean isUserLoggedIn() {
         return sharedPreferences.getBoolean("isLoggedIn", false);
+    }
+
+    public void loadSavedUser() {
+        String savedUsername = sharedPreferences.getString("username", null);
+        String savedPassword = sharedPreferences.getString("password", null);
+        if (savedUsername != null) changeUsername(savedUsername);
+        if (savedPassword != null) changePassword(savedPassword);
     }
 }

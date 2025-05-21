@@ -1,6 +1,8 @@
-package com.example.spacex.data.utils.container;
+package com.example.spacex.data.dto;
 
-public class UserContainer {
+public class UpdatedUserDto {
+
+    private final String id;
 
     private final String name;
 
@@ -12,13 +14,14 @@ public class UserContainer {
 
     private final String email;
 
-    public UserContainer(
-            String name,
+    public UpdatedUserDto(
+            String id, String name,
             String username,
             String photoUrl,
             String phone,
             String email
     ) {
+        this.id = id;
         this.name = name;
         this.username = username;
         this.photoUrl = photoUrl;
@@ -44,5 +47,9 @@ public class UserContainer {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getId() {
+        return id;
     }
 }

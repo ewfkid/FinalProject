@@ -44,6 +44,12 @@ public class CommentListViewModel extends ViewModel {
         );
     }
 
+    public void addComment() {
+    }
+
+    public void changeContent(String content) {
+    }
+
 
     public class State {
 

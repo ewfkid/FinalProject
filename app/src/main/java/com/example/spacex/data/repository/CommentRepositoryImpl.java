@@ -1,7 +1,9 @@
 package com.example.spacex.data.repository;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.example.spacex.data.dto.CommentInitDto;
 import com.example.spacex.data.network.RetrofitFactory;
 import com.example.spacex.data.source.CommentApi;
 import com.example.spacex.data.utils.CallToConsumer;
@@ -35,6 +37,27 @@ public class CommentRepositoryImpl implements CommentRepository {
         commentApi.getAllComments(articleId).enqueue(new CallToConsumer<>(
                 callback,
                 CommentMapper::toCommentEntityList
+        ));
+    }
+
+    @Override
+    public void addComment(
+            @NonNull String articleId,
+            @NonNull String username,
+            @Nullable String photoUrl,
+            @NonNull String content,
+            @NonNull String userId,
+            Consumer<Status<Void>> callback
+    ) {
+        commentApi.addComment(new CommentInitDto(
+                articleId,
+                username,
+                photoUrl,
+                content,
+                userId
+        )).enqueue(new CallToConsumer<>(
+                callback,
+                dto -> null
         ));
     }
 }

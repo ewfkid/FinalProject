@@ -1,21 +1,28 @@
 package com.example.spacex.data.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.spacex.data.dto.AccountDto;
+import com.example.spacex.data.dto.UpdatedUserDto;
 import com.example.spacex.data.network.RetrofitFactory;
 import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.UserApi;
 import com.example.spacex.data.utils.CallToConsumer;
-import com.example.spacex.data.utils.container.UserContainer;
 import com.example.spacex.data.utils.mapper.UserMapper;
 import com.example.spacex.domain.entity.Status;
 import com.example.spacex.domain.entity.UserEntity;
 import com.example.spacex.domain.sign.SignRepository;
 import com.example.spacex.domain.user.UserRepository;
 
+import java.io.IOException;
 import java.util.function.Consumer;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class UserRepositoryImpl implements SignRepository, UserRepository {
 
@@ -82,18 +89,46 @@ public class UserRepositoryImpl implements SignRepository, UserRepository {
     }
 
     @Override
-    public void updateUser(
-            @NonNull String id,
-            @NonNull String name,
-            @NonNull String username,
-            @NonNull String email,
-            @Nullable String phone,
-            @Nullable String photoUrl,
-            Consumer<Status<Void>> callback
-    ) {
-        userApi.updateUserById(id, new UserContainer(name, username, photoUrl, phone, email)).enqueue(new CallToConsumer<>(
-                callback,
-                dto -> null
-        ));
+    public void updateUser(@NonNull String id, @NonNull String name, @NonNull String username, @NonNull String email, @Nullable String phone, @Nullable String photoUrl, Consumer<Status<Void>> callback) {
+        userApi.updateUserById(id, new UpdatedUserDto(id, name, username, photoUrl, phone, email))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.accept(new Status<>(200, null, null));
+                        } else {
+                            try {
+                                String errorBody = response.errorBody() != null ? response.errorBody().string() : "empty error body";
+                                Log.e("UserRepositoryImpl", "Update user failed. Code: " + response.code() + ", Error: " + errorBody);
+                            } catch (IOException e) {
+                                Log.e("UserRepositoryImpl", "Failed to read error body", e);
+                            }
+                            callback.accept(new Status<>(response.code(), null, null));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Log.e("UserRepositoryImpl", "Update user request failed: " + t.getMessage(), t);
+                        callback.accept(new Status<>(-1, null, t));
+                    }
+                });
+
     }
+
+//    @Override
+//    public void updateUser(
+//            @NonNull String id,
+//            @NonNull String name,
+//            @NonNull String username,
+//            @NonNull String email,
+//            @Nullable String phone,
+//            @Nullable String photoUrl,
+//            Consumer<Status<Void>> callback
+//    ) {
+//        userApi.updateUserById(id, new UpdatedUserDto(id, name, username, photoUrl, phone, email)).enqueue(new CallToConsumer<>(
+//                callback,
+//                dto -> null
+//        ));
+//    }
 }

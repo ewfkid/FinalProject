@@ -2,6 +2,7 @@ package com.example.spacex.ui.article_and_comments.comments_list;
 
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -11,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentCommentsListBinding;
+import com.example.spacex.ui.article_and_comments.comments_list.factory.CommentListViewModelFactory;
+import com.example.spacex.ui.utils.OnChangeText;
 import com.example.spacex.ui.utils.Utils;
 
 public class CommentListFragment extends Fragment {
@@ -45,7 +48,6 @@ public class CommentListFragment extends Fragment {
         CommentListAdapter adapter = new CommentListAdapter();
         binding.recycler.setAdapter(adapter);
         binding.refresh.setOnRefreshListener(() -> viewModel.update(articleId));
-
         subscribe(viewModel, adapter);
         viewModel.update(articleId);
     }

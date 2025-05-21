@@ -27,7 +27,7 @@ public class CommentDto {
     public  String content;
 
     @Nullable
-    @SerializedName("userId")
+    @SerializedName("user_id")
     public  String userId;
 
     public CommentDto(
