@@ -49,5 +49,6 @@ dependencies {
     implementation(libs.picasso)
     implementation(libs.material)
     implementation(libs.circleimageview)
+    implementation(libs.android.image.cropper)
 
 }
