@@ -2,12 +2,15 @@ package com.example.spacex.ui.update_profile;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import com.example.spacex.R;
@@ -35,9 +38,11 @@ public class UpdateProfileFragment extends Fragment {
         binding = FragmentUpdateProfileBinding.bind(view);
         UserSessionManager userSessionManager = new UserSessionManager(requireContext());
         UpdateProfileViewModelFactory factory = new UpdateProfileViewModelFactory(userSessionManager);
-        UpdateProfileViewModel viewModel = new ViewModelProvider(this, factory).get(UpdateProfileViewModel.class);
+        viewModel = new ViewModelProvider(this, factory).get(UpdateProfileViewModel.class);
         String id = getArguments() != null ? getArguments().getString(KEY_ID) : null;
         if (id == null) throw new IllegalStateException("Id cannot be null");
+        viewModel.load(id);
+        subscribe(viewModel, id);
         binding.close.setOnClickListener(v -> goBack());
         binding.editEmail.addTextChangedListener(new OnChangeText() {
             @Override
@@ -60,8 +65,6 @@ public class UpdateProfileFragment extends Fragment {
                 viewModel.changePhone(s.toString());
             }
         });
-        viewModel.load(id);
-        subscribe(viewModel, id);
     }
 
     private void subscribe(final UpdateProfileViewModel viewModel, @NonNull String userId) {
@@ -82,16 +85,33 @@ public class UpdateProfileFragment extends Fragment {
                 } else {
                     binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
                 }
+                if (binding.editName.getText().toString().isEmpty()) {
+                    binding.editName.setText(user.getName());
+                }
+                if (binding.editEmail.getText().toString().isEmpty()) {
+                    binding.editEmail.setText(user.getEmail());
+                }
+                if (!TextUtils.isEmpty(user.getPhone()) && binding.editPhone.getText().toString().isEmpty()) {
+                    binding.editPhone.setText(user.getPhone());
+                }
             }
+            viewModel.openProfileLiveData.observe(getViewLifecycleOwner(), unused -> {
+                goBack();
+            });
             binding.buttonSave.setOnClickListener(v -> viewModel.save(userId));
             binding.editUserImage.setOnClickListener(v -> {});
         });
     }
 
     private void goBack() {
-        final View view = getView();
-        if (view == null) return;
-        Navigation.findNavController(view).navigate(R.id.action_updateProfileFragment_to_profileFragment);
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(
+                R.id.profileFragment,
+                null,
+                new NavOptions.Builder()
+                        .setPopUpTo(R.id.eventListFragment, true)
+                        .build()
+        );
     }
 
     public static Bundle getBundle(@NonNull String id) {
