@@ -99,7 +99,7 @@ public class UpdateProfileFragment extends Fragment {
                 goBack();
             });
             binding.buttonSave.setOnClickListener(v -> viewModel.save(userId));
-            binding.editUserImage.setOnClickListener(v -> {});
+            binding.editUserImage.setOnClickListener(v -> viewModel.updateImage());
         });
     }
 

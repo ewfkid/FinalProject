@@ -104,7 +104,7 @@
 
     <fragment
         android:id="@+id/articleScreenFragment"
-        android:name="com.example.spacex.ui.article_and_comments.ArticleScreenFragment"
+        android:name="com.example.spacex.ui.article_and_comments.SharedScreenFragment"
         android:label="ArticleScreenFragment"
         tools:layout="@layout/fragment_article_screen">
         <argument

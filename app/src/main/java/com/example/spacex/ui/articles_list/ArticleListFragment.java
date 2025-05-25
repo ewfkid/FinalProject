@@ -11,7 +11,7 @@ import androidx.navigation.Navigation;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentArticlesListBinding;
-import com.example.spacex.ui.article_and_comments.ArticleScreenFragment;
+import com.example.spacex.ui.article_and_comments.SharedScreenFragment;
 import com.example.spacex.ui.utils.Utils;
 
 public class ArticleListFragment extends Fragment {
@@ -57,7 +57,7 @@ public class ArticleListFragment extends Fragment {
         if (view == null) return;
         Navigation.findNavController(view).navigate(
                 R.id.action_articlesListFragment_to_articleScreenFragment,
-                ArticleScreenFragment.getBundle(articleId)
+                SharedScreenFragment.getBundle(articleId)
         );
     }
 

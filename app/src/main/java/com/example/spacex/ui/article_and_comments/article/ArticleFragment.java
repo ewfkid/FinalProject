@@ -1,7 +1,11 @@
 package com.example.spacex.ui.article_and_comments.article;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentArticleBinding;
 import com.example.spacex.domain.entity.FullArticleEntity;
+import com.example.spacex.ui.utils.OnChangeText;
 import com.example.spacex.ui.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -37,7 +42,6 @@ public class ArticleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentArticleBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(ArticleViewModel.class);
-
         String articleId = getArguments() != null ? getArguments().getString(KEY_ARTICLE_ID) : null;
         if (articleId == null || articleId.isEmpty()) {
             throw new IllegalStateException("Article Id cannot be null or empty");
@@ -56,7 +60,6 @@ public class ArticleFragment extends Fragment {
             boolean isSuccess = !state.isLoading()
                     && state.getErrorMessage() == null
                     && state.getArticle() != null;
-
             binding.progressbar.setVisibility(Utils.visibleOrGone(state.isLoading()));
             binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             binding.error.setText(state.getErrorMessage());

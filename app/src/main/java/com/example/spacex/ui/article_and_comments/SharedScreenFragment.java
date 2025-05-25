@@ -6,18 +6,19 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentArticleScreenBinding;
 import com.example.spacex.ui.article_and_comments.article.ArticleFragment;
 import com.example.spacex.ui.article_and_comments.comments_list.CommentListFragment;
 
-public class ArticleScreenFragment extends Fragment {
+public class SharedScreenFragment extends Fragment {
 
     private FragmentArticleScreenBinding binding;
     private static final String KEY_ARTICLE_ID = "articleId";
 
-    public ArticleScreenFragment() {
+    public SharedScreenFragment() {
         super(R.layout.fragment_article_screen);
     }
 

@@ -1,6 +1,9 @@
 package com.example.spacex.ui.update_profile;
 
 
+import android.content.Context;
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -11,6 +14,7 @@ import com.example.spacex.data.repository.UserRepositoryImpl;
 import com.example.spacex.domain.entity.UserEntity;
 import com.example.spacex.domain.user.GetUserByIdUseCase;
 import com.example.spacex.domain.user.UpdateUserUseCase;
+import com.example.spacex.ui.utils.ImageUploader;
 import com.example.spacex.ui.utils.UserSessionManager;
 
 public class UpdateProfileViewModel extends ViewModel {
@@ -129,6 +133,33 @@ public class UpdateProfileViewModel extends ViewModel {
                 }
         );
     }
+
+    public void updateImage() {
+        //TODO
+    }
+
+//    public void updateImage(Uri imageUri, Context context) {
+//        mutableStateLiveData.postValue(new State(null, currentUser, true));
+//
+//        ImageUploader.uploadImageToBack4App(context, imageUri, new ImageUploader.UploadCallback() {
+//            @Override
+//            public void onSuccess(String url) {
+//                updateUser(
+//                        currentUser.getId(),
+//                        currentUser.getName(),
+//                        currentUser.getUsername(),
+//                        currentUser.getEmail(),
+//                        currentUser.getPhone(),
+//                        url
+//                );
+//            }
+//            @Override
+//            public void onError(String message) {
+//                mutableStateLiveData.postValue(new State(message, currentUser, false));
+//            }
+//        });
+//    }
+
 
 
     public static class State {

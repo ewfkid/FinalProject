@@ -50,5 +50,5 @@ dependencies {
     implementation(libs.material)
     implementation(libs.circleimageview)
     implementation(libs.android.image.cropper)
-
+    implementation(libs.parse.sdk.android.parse)
 }
