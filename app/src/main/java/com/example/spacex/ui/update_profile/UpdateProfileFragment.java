@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -27,6 +26,7 @@ public class UpdateProfileFragment extends Fragment {
     private FragmentUpdateProfileBinding binding;
     private UpdateProfileViewModel viewModel;
     private static final String KEY_ID = "user_id";
+    private String userId;
 
     public UpdateProfileFragment() {
         super(R.layout.fragment_update_profile);
@@ -41,8 +41,9 @@ public class UpdateProfileFragment extends Fragment {
         viewModel = new ViewModelProvider(this, factory).get(UpdateProfileViewModel.class);
         String id = getArguments() != null ? getArguments().getString(KEY_ID) : null;
         if (id == null) throw new IllegalStateException("Id cannot be null");
-        viewModel.load(id);
-        subscribe(viewModel, id);
+        userId = id;
+        viewModel.load(userId);
+        subscribe(viewModel, userId);
         binding.close.setOnClickListener(v -> goBack());
         binding.editEmail.addTextChangedListener(new OnChangeText() {
             @Override
@@ -65,9 +66,14 @@ public class UpdateProfileFragment extends Fragment {
                 viewModel.changePhone(s.toString());
             }
         });
+
+        binding.editUserImage.setOnClickListener(v -> viewModel.updateImage());
+        binding.buttonSave.setOnClickListener(v -> viewModel.save(userId));
     }
 
-    private void subscribe(final UpdateProfileViewModel viewModel, @NonNull String userId) {
+
+
+    private void subscribe(UpdateProfileViewModel viewModel, @NonNull String userId) {
         viewModel.stateLiveData.observe(getViewLifecycleOwner(), state -> {
             boolean isSuccess = !state.isLoading()
                     && state.getErrorMessage() == null
@@ -76,8 +82,6 @@ public class UpdateProfileFragment extends Fragment {
             binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             binding.error.setText(state.getErrorMessage());
             binding.constraintParent.setVisibility(Utils.visibleOrGone(isSuccess));
-            binding.loading.setVisibility(Utils.visibleOrGone(state.isLoading()));
-            binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             if (isSuccess) {
                 UserEntity user = state.getUser();
                 if (user.getPhotoUrl() != null) {
@@ -95,12 +99,8 @@ public class UpdateProfileFragment extends Fragment {
                     binding.editPhone.setText(user.getPhone());
                 }
             }
-            viewModel.openProfileLiveData.observe(getViewLifecycleOwner(), unused -> {
-                goBack();
-            });
-            binding.buttonSave.setOnClickListener(v -> viewModel.save(userId));
-            binding.editUserImage.setOnClickListener(v -> viewModel.updateImage());
         });
+        viewModel.openProfileLiveData.observe(getViewLifecycleOwner(), unused -> goBack());
     }
 
     private void goBack() {

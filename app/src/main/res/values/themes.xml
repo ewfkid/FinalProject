@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.SpaceX" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.SpaceX" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar</item>
     </style>
 
     <style name="Theme.SpaceX" parent="Base.Theme.SpaceX" />

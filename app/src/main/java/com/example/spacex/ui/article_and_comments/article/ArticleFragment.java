@@ -3,9 +3,7 @@ package com.example.spacex.ui.article_and_comments.article;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentArticleBinding;
 import com.example.spacex.domain.entity.FullArticleEntity;
-import com.example.spacex.ui.utils.OnChangeText;
+import com.example.spacex.domain.entity.ReactionType;
 import com.example.spacex.ui.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -37,6 +35,11 @@ public class ArticleFragment extends Fragment {
         return fragment;
     }
 
+    private String getUserId() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        return prefs.getString("userId", null);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -47,13 +50,37 @@ public class ArticleFragment extends Fragment {
             throw new IllegalStateException("Article Id cannot be null or empty");
         }
 
+
         viewModel.load(articleId);
         subscribe(viewModel);
 
-        binding.likeButton.setOnClickListener(v -> viewModel.like());
-        binding.dislikeButton.setOnClickListener(v -> viewModel.dislike());
+        binding.likeButton.setOnClickListener(v -> {
+            viewModel.like(articleId, getUserId());
+        });
+
+        binding.dislikeButton.setOnClickListener(v -> {
+            viewModel.dislike(articleId, getUserId());
+        });
+
+        viewModel.getReactionLiveData().observe(getViewLifecycleOwner(), this::updateReactionButtons);
+
         binding.favouritesButton.setOnClickListener(v -> viewModel.addToFavourites());
     }
+
+    private void updateReactionButtons(ReactionType reaction) {
+        if (reaction == ReactionType.Like) {
+            binding.likeButton.setImageResource(R.drawable.ic_like_gray);
+            binding.dislikeButton.setImageResource(R.drawable.ic_dislike_transparent);
+        } else if (reaction == ReactionType.Dislike) {
+            binding.likeButton.setImageResource(R.drawable.ic_like_transparent);
+            binding.dislikeButton.setImageResource(R.drawable.ic_dislike_gray);
+        } else {
+            binding.likeButton.setImageResource(R.drawable.ic_like_transparent);
+            binding.dislikeButton.setImageResource(R.drawable.ic_dislike_transparent);
+        }
+    }
+
+
 
     private void subscribe(final ArticleViewModel viewModel) {
         viewModel.stateLiveData.observe(getViewLifecycleOwner(), state -> {

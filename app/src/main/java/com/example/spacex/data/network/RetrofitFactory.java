@@ -6,6 +6,7 @@ import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.data.source.EventApi;
 import com.example.spacex.data.source.FavouritesApi;
 import com.example.spacex.data.source.LaunchApi;
+import com.example.spacex.data.source.ReactionApi;
 import com.example.spacex.data.source.UserApi;
 
 import okhttp3.OkHttpClient;
@@ -75,6 +76,10 @@ public class RetrofitFactory {
 
     public FavouritesApi getFavouritesApi() {
         return retrofitUser.create(FavouritesApi.class);
+    }
+
+    public ReactionApi getReactionApi() {
+        return retrofitUser.create(ReactionApi.class);
     }
 
 }

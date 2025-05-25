@@ -20,22 +20,9 @@ public class FavouritesListViewModel extends ViewModel {
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableLiveData;
 
-    /* UseCases */
-
     private final GetFavouritesListUseCase getFavouritesListUseCase = new GetFavouritesListUseCase(
             FavouritesRepositoryImpl.getInstance()
     );
-
-    private final RemoveFromFavouritesUseCase removeFromFavouritesUseCase = new RemoveFromFavouritesUseCase(
-            FavouritesRepositoryImpl.getInstance()
-    );
-
-    private final AddToFavouritesUseCase addToFavouritesUseCase = new AddToFavouritesUseCase(
-            FavouritesRepositoryImpl.getInstance()
-    );
-
-    /* UseCases */
-
     public FavouritesListViewModel() {
         update();
     }
