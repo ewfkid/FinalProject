@@ -1,5 +1,9 @@
 package com.example.spacex.ui.update_profile;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -67,7 +71,7 @@ public class UpdateProfileFragment extends Fragment {
             }
         });
 
-        binding.editUserImage.setOnClickListener(v -> viewModel.updateImage());
+
         binding.buttonSave.setOnClickListener(v -> viewModel.save(userId));
     }
 
