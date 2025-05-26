@@ -67,16 +67,20 @@ public class CommentListFragment extends Fragment {
         subscribe(viewModel, adapter);
 
         binding.send.setOnClickListener(v -> {
-            viewModel.changeContent(binding.editContent.getText().toString());
-            viewModel.addComment();
-            binding.editContent.setText("");
+            String comment = binding.editContent.getText().toString().trim();
+            if (!comment.isEmpty()) {
+                viewModel.changeContent(comment);
+                viewModel.addComment();
+                binding.editContent.setText("");
+            } else {
+                Toast.makeText(getContext(), "Comment cannot be empty", Toast.LENGTH_SHORT).show();
+            }
         });
 
         binding.editContent.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
 
-                viewModel.changeContent(v.getText().toString());
                 InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
