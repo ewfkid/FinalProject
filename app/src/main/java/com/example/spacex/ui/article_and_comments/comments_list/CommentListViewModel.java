@@ -1,6 +1,6 @@
 package com.example.spacex.ui.article_and_comments.comments_list;
 
-import android.content.SharedPreferences;
+import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +13,8 @@ import com.example.spacex.domain.comment.AddCommentUseCase;
 import com.example.spacex.domain.comment.GetCommentListUseCase;
 import com.example.spacex.domain.entity.CommentEntity;
 import com.example.spacex.domain.entity.Status;
+import com.example.spacex.domain.entity.UserEntity;
+import com.example.spacex.ui.service.UserSessionManager;
 
 import java.util.List;
 
@@ -24,9 +26,10 @@ public class CommentListViewModel extends ViewModel {
     private final MutableLiveData<String> mutableErrorLiveData = new MutableLiveData<>();
     public final LiveData<String> errorLiveData = mutableErrorLiveData;
 
-    private final SharedPreferences sharedPreferences;
     private final String articleId;
     private String content;
+
+    private final Application application;
 
     //* UseCases *//
     private final GetCommentListUseCase getCommentListUseCase = new GetCommentListUseCase(
@@ -38,9 +41,9 @@ public class CommentListViewModel extends ViewModel {
     );
     //* UseCases *//
 
-    public CommentListViewModel(@NonNull String articleId, @NonNull SharedPreferences sharedPreferences) {
+    public CommentListViewModel(@NonNull Application application, @NonNull String articleId) {
+        this.application = application;
         this.articleId = articleId;
-        this.sharedPreferences = sharedPreferences;
         update();
     }
 
@@ -69,14 +72,17 @@ public class CommentListViewModel extends ViewModel {
             return;
         }
 
-        String username = sharedPreferences.getString("username", null);
-        String photoUrl = sharedPreferences.getString("photoUrl", null);
-        String userId = sharedPreferences.getString("userId", null);
+        UserSessionManager sessionManager = new UserSessionManager(application);
+        UserEntity user = sessionManager.getUser();
 
-        if (username == null || userId == null) {
+        if (user == null || user.getUsername() == null || user.getId() == null) {
             mutableErrorLiveData.postValue("User not logged in");
             return;
         }
+
+        String username = user.getUsername();
+        String photoUrl = user.getPhotoUrl();
+        String userId = String.valueOf(user.getId());
 
         addCommentUseCase.execute(
                 articleId,

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -58,7 +57,6 @@ public class UpdateProfileFragment extends Fragment {
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri imageUri = result.getData().getData();
-                        Log.d("UpdateProfile", "Image picked: " + imageUri);
                         startCrop(imageUri);
                     }
                 });
@@ -66,10 +64,8 @@ public class UpdateProfileFragment extends Fragment {
         cropImageActivity = registerForActivityResult(new CropImageContract(), result -> {
             Uri croppedImageUri = result.getUriContent();
             if (croppedImageUri != null) {
-                Log.d("UpdateProfile", "Cropped image URI: " + croppedImageUri);
                 viewModel.uploadAvatar(croppedImageUri, requireActivity().getContentResolver());
             } else if (result.getError() != null) {
-                Log.e("UpdateProfile", "Crop error: " + result.getError().getMessage());
                 Toast.makeText(requireContext(), "Failed to crop: " + result.getError().getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -88,7 +84,6 @@ public class UpdateProfileFragment extends Fragment {
         if (id == null) throw new IllegalStateException("Id cannot be null");
         userId = id;
 
-        Log.d("UpdateProfile", "Loading user ID: " + userId);
         viewModel.load(userId);
         subscribe(viewModel);
 
@@ -116,7 +111,6 @@ public class UpdateProfileFragment extends Fragment {
         binding.editUserImage.setOnClickListener(v -> launchGalleryPicker());
 
         binding.buttonSave.setOnClickListener(v -> {
-            Log.d("UpdateProfile", "Save button clicked for user: " + userId);
             viewModel.save(userId);
         });
     }
@@ -127,10 +121,6 @@ public class UpdateProfileFragment extends Fragment {
                     && state.getErrorMessage() == null
                     && state.getUser() != null;
 
-            Log.d("UpdateProfile", "State update: loading=" + state.isLoading() +
-                    ", error=" + state.getErrorMessage() +
-                    ", user=" + (state.getUser() != null ? state.getUser().getId() : "null"));
-
             binding.loading.setVisibility(Utils.visibleOrGone(state.isLoading()));
             binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             binding.error.setText(state.getErrorMessage());
@@ -138,26 +128,10 @@ public class UpdateProfileFragment extends Fragment {
 
             if (isSuccess) {
                 UserEntity user = state.getUser();
-                Log.d("UpdateProfile", "User loaded: " + user.getName() + ", photoUrl: " + user.getPhotoUrl());
 
                 if (user.getPhotoUrl() != null) {
-                    Picasso.get()
-                            .load(user.getPhotoUrl())
-                            .placeholder(R.drawable.ic_default_user_avatar)
-                            .error(R.drawable.ic_default_user_avatar)
-                            .into(binding.userImage, new com.squareup.picasso.Callback() {
-                                @Override
-                                public void onSuccess() {
-                                    Log.d("UpdateProfile", "Avatar loaded successfully.");
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    Log.e("UpdateProfile", "Failed to load avatar: " + e.getMessage());
-                                }
-                            });
+                    Picasso.get().load(user.getPhotoUrl()).into(binding.userImage);
                 } else {
-                    Log.d("UpdateProfile", "No avatar URL found. Setting default image.");
                     binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
                 }
 
@@ -175,19 +149,16 @@ public class UpdateProfileFragment extends Fragment {
 
 
         viewModel.openProfileLiveData.observe(getViewLifecycleOwner(), unused -> {
-            Log.d("UpdateProfile", "Navigation back to profile.");
             goBack();
         });
     }
 
     private void launchGalleryPicker() {
-        Log.d("UpdateProfile", "Launching gallery picker...");
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickImageLauncher.launch(intent);
     }
 
     private void startCrop(Uri imageUri) {
-        Log.d("UpdateProfile", "Starting crop for image: " + imageUri);
         CropImageOptions options = new CropImageOptions();
         options.guidelines = CropImageView.Guidelines.ON;
         options.fixAspectRatio = true;

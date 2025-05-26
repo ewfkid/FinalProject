@@ -3,6 +3,7 @@ package com.example.spacex.ui.create_article;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -11,6 +12,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.spacex.data.repository.ArticleRepositoryImpl;
 import com.example.spacex.domain.article.CreateArticleUseCase;
+import com.example.spacex.domain.entity.UserEntity;
+import com.example.spacex.ui.service.UserSessionManager;
 
 import java.util.ArrayList;
 
@@ -26,14 +29,11 @@ public class CreateArticleViewModel extends AndroidViewModel {
             ArticleRepositoryImpl.getInstance()
     );
 
-    private final SharedPreferences sharedPreferences;
-
     private String title;
     private String content;
 
     public CreateArticleViewModel(@NonNull Application application) {
         super(application);
-        sharedPreferences = application.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
     }
 
     public void changeTitle(@NonNull String title) {
@@ -54,9 +54,20 @@ public class CreateArticleViewModel extends AndroidViewModel {
             return;
         }
 
-        String username = sharedPreferences.getString("username", null);
+        UserSessionManager sessionManager = new UserSessionManager(getApplication());
+        UserEntity user = sessionManager.getUser();
+        Log.d("CreateArticleVM", "photoUrl from session: " +  user.getPhotoUrl());
 
-        String photoUrl = sharedPreferences.getString("photoUrl", null);
+
+        if (user == null) {
+            mutableErrorLiveData.postValue("User not logged in");
+            return;
+        }
+
+        String username = user.getUsername();
+
+        String photoUrl = user.getPhotoUrl();
+
 
         if (username == null) {
             mutableErrorLiveData.postValue("User not logged in");

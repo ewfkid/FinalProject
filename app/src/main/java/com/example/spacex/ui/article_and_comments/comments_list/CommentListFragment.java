@@ -2,7 +2,6 @@ package com.example.spacex.ui.article_and_comments.comments_list;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,7 +16,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentCommentsListBinding;
+import com.example.spacex.domain.entity.UserEntity;
 import com.example.spacex.ui.article_and_comments.comments_list.factory.CommentListViewModelFactory;
+import com.example.spacex.ui.service.UserSessionManager;
 import com.example.spacex.ui.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -42,29 +43,35 @@ public class CommentListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentCommentsListBinding.bind(view);
+
         String articleId = getArguments() != null ? getArguments().getString(KEY_ARTICLE_ID) : null;
         if (articleId == null) throw new IllegalStateException("Article Id cannot be null");
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        CommentListViewModel viewModel = new ViewModelProvider(
-                this,
-                new CommentListViewModelFactory(articleId, sharedPreferences)
-        ).get(CommentListViewModel.class);
+
+        CommentListViewModelFactory factory = new CommentListViewModelFactory(requireActivity().getApplication(), articleId);
+        CommentListViewModel viewModel = new ViewModelProvider(this, factory).get(CommentListViewModel.class);
 
         CommentListAdapter adapter = new CommentListAdapter();
-        String photoUrl = sharedPreferences.getString("photoUrl", null);
+        binding.recycler.setAdapter(adapter);
+
+        UserSessionManager sessionManager = new UserSessionManager(requireContext());
+        UserEntity user = sessionManager.getUser();
+        String photoUrl = user != null ? user.getPhotoUrl() : null;
+
         if (photoUrl != null && !photoUrl.isEmpty()) {
             Picasso.get().load(photoUrl).into(binding.userAvatar);
         } else {
             binding.userAvatar.setImageResource(R.drawable.ic_default_user_avatar);
         }
-        binding.recycler.setAdapter(adapter);
-        binding.refresh.setOnRefreshListener(() -> viewModel.update());
+
+        binding.refresh.setOnRefreshListener(viewModel::update);
         subscribe(viewModel, adapter);
-        viewModel.update();
+
         binding.send.setOnClickListener(v -> {
+            viewModel.changeContent(binding.editContent.getText().toString());
             viewModel.addComment();
             binding.editContent.setText("");
         });
+
         binding.editContent.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE ||
                     (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
@@ -80,22 +87,27 @@ public class CommentListFragment extends Fragment {
             return false;
         });
 
+        viewModel.update();
     }
 
     private void subscribe(final CommentListViewModel viewModel, CommentListAdapter adapter) {
         viewModel.errorLiveData.observe(getViewLifecycleOwner(), error ->
                 Toast.makeText(getContext(), error, Toast.LENGTH_SHORT).show()
         );
+
         viewModel.stateLiveData.observe(getViewLifecycleOwner(), state -> {
             boolean isSuccess = !state.isLoading()
                     && state.getErrorMessage() == null
                     && state.getItems() != null;
+
             binding.refresh.setEnabled(!state.isLoading());
             if (!state.isLoading()) binding.refresh.setRefreshing(false);
+
             binding.recycler.setVisibility(Utils.visibleOrGone(isSuccess));
             binding.constraintComment.setVisibility(Utils.visibleOrGone(isSuccess));
             binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             binding.loading.setVisibility(Utils.visibleOrGone(state.isLoading()));
+
             binding.error.setText(state.getErrorMessage());
             if (isSuccess) {
                 adapter.updateData(state.getItems());

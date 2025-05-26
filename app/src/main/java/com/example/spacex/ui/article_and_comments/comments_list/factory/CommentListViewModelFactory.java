@@ -1,6 +1,6 @@
 package com.example.spacex.ui.article_and_comments.comments_list.factory;
 
-import android.content.SharedPreferences;
+import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -10,21 +10,20 @@ import com.example.spacex.ui.article_and_comments.comments_list.CommentListViewM
 
 public class CommentListViewModelFactory implements ViewModelProvider.Factory {
 
+    private final Application application;
     private final String articleId;
-    private final SharedPreferences sharedPreferences;
 
-    public CommentListViewModelFactory(String articleId, SharedPreferences sharedPreferences) {
+    public CommentListViewModelFactory(Application application, String articleId) {
+        this.application = application;
         this.articleId = articleId;
-        this.sharedPreferences = sharedPreferences;
     }
 
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(CommentListViewModel.class)) {
-            return (T) new CommentListViewModel(articleId, sharedPreferences);
+            return (T) new CommentListViewModel(application, articleId);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }
 }
-
