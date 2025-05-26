@@ -89,12 +89,26 @@ public class UserRepositoryImpl implements SignRepository, UserRepository {
     }
 
     @Override
-    public void updateUser(@NonNull String id, @NonNull String name, @NonNull String username, @NonNull String email, @Nullable String phone, @Nullable String photoUrl, Consumer<Status<Void>> callback) {
-        userApi.updateUserById(id, new UpdatedUserDto(id, name, username, photoUrl, phone, email))
+    public void updateUser(@NonNull String id, @NonNull String name, @NonNull String username,
+                           @NonNull String email, @Nullable String phone, @Nullable String photoUrl,
+                           Consumer<Status<Void>> callback) {
+
+        UpdatedUserDto updatedUserDto = new UpdatedUserDto(id, name, username, photoUrl, phone, email);
+
+        Log.d("UserRepositoryImpl", "Updating user with ID: " + id);
+        Log.d("UserRepositoryImpl", "Name: " + name);
+        Log.d("UserRepositoryImpl", "Username: " + username);
+        Log.d("UserRepositoryImpl", "Email: " + email);
+        Log.d("UserRepositoryImpl", "Phone: " + (phone != null ? phone : "null"));
+        Log.d("UserRepositoryImpl", "PhotoUrl: " + (photoUrl != null ? photoUrl : "null"));
+        Log.d("UserRepositoryImpl", "Request payload: " + updatedUserDto.toString());
+
+        userApi.updateUserById(id, updatedUserDto)
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
                         if (response.isSuccessful()) {
+                            Log.d("UserRepositoryImpl", "User update successful for ID: " + id);
                             callback.accept(new Status<>(200, null, null));
                         } else {
                             try {
@@ -113,7 +127,6 @@ public class UserRepositoryImpl implements SignRepository, UserRepository {
                         callback.accept(new Status<>(-1, null, t));
                     }
                 });
-
     }
 
 //    @Override
