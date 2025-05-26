@@ -74,13 +74,11 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             } else {
                 binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
             }
-
-            binding.dislikeButton.setOnClickListener(v -> {
-                // TODO
-            });
-            binding.likeButton.setOnClickListener(v -> {
-                // TODO
-            });
+            if (item.isFavourite()){
+                binding.favouritesButton.setImageResource(R.drawable.ic_favourites_yellow);
+            } else {
+                binding.favouritesButton.setImageResource(R.drawable.ic_favourites_transparent);
+            }
             binding.getRoot().setOnClickListener(v -> {
                 onItemClick.accept(item.getId());
             });
