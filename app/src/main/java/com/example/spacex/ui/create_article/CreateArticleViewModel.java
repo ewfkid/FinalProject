@@ -1,9 +1,6 @@
 package com.example.spacex.ui.create_article;
 
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -56,8 +53,6 @@ public class CreateArticleViewModel extends AndroidViewModel {
 
         UserSessionManager sessionManager = new UserSessionManager(getApplication());
         UserEntity user = sessionManager.getUser();
-        Log.d("CreateArticleVM", "photoUrl from session: " +  user.getPhotoUrl());
-
 
         if (user == null) {
             mutableErrorLiveData.postValue("User not logged in");
