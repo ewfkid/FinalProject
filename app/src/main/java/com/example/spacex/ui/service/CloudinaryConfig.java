@@ -1,4 +1,4 @@
-package com.example.spacex.ui.utils;
+package com.example.spacex.ui.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

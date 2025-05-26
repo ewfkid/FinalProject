@@ -1,4 +1,4 @@
-package com.example.spacex.ui.utils;
+package com.example.spacex.ui.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;

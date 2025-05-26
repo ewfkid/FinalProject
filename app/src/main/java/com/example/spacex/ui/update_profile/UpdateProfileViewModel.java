@@ -17,8 +17,8 @@ import com.example.spacex.data.repository.UserRepositoryImpl;
 import com.example.spacex.domain.entity.UserEntity;
 import com.example.spacex.domain.user.GetUserByIdUseCase;
 import com.example.spacex.domain.user.UpdateUserUseCase;
-import com.example.spacex.ui.utils.CloudinaryConfig;
-import com.example.spacex.ui.utils.UserSessionManager;
+import com.example.spacex.ui.service.CloudinaryConfig;
+import com.example.spacex.ui.service.UserSessionManager;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

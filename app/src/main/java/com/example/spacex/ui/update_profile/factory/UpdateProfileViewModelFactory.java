@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.spacex.ui.update_profile.UpdateProfileViewModel;
-import com.example.spacex.ui.utils.UserSessionManager;
+import com.example.spacex.ui.service.UserSessionManager;
 
 public class UpdateProfileViewModelFactory implements ViewModelProvider.Factory {
     private final UserSessionManager userSessionManager;
