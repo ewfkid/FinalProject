@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.spacex.data.repository.UserRepositoryImpl;
+import com.example.spacex.data.source.CredentialsDataSource;
 import com.example.spacex.domain.entity.UserEntity;
 import com.example.spacex.domain.sign.IsUserExistUseCase;
 import com.example.spacex.domain.sign.LoginUserUseCase;
@@ -26,8 +27,12 @@ public class LoginViewModel extends AndroidViewModel {
     public final LiveData<Boolean> openEventsLiveData = mutableOpenEventsLiveData;
 
     /* UseCases */
-    private final IsUserExistUseCase isUserExistUseCase = new IsUserExistUseCase(UserRepositoryImpl.getInstance());
-    private final LoginUserUseCase loginUserUseCase = new LoginUserUseCase(UserRepositoryImpl.getInstance());
+    private final IsUserExistUseCase isUserExistUseCase = new IsUserExistUseCase(
+            UserRepositoryImpl.getInstance()
+    );
+    private final LoginUserUseCase loginUserUseCase = new LoginUserUseCase(
+            UserRepositoryImpl.getInstance()
+    );
     /* UseCases */
 
     private String username;
@@ -77,6 +82,8 @@ public class LoginViewModel extends AndroidViewModel {
             if (status.getStatusCode() == 200 && status.getError() == null) {
                 UserEntity user = status.getValue();
                 if (user != null) {
+                    CredentialsDataSource.getInstance().updateLogin(currentUsername, currentPassword);
+
                     saveUserData(currentUsername, currentPassword);
                     saveFullUserData(user);
                     mutableOpenEventsLiveData.postValue(true);
@@ -136,5 +143,8 @@ public class LoginViewModel extends AndroidViewModel {
         String savedPassword = sharedPreferences.getString("password", null);
         if (savedUsername != null) changeUsername(savedUsername);
         if (savedPassword != null) changePassword(savedPassword);
+        if (savedUsername != null && savedPassword != null) {
+            CredentialsDataSource.getInstance().updateLogin(savedUsername, savedPassword);
+        }
     }
 }
