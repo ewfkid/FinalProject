@@ -28,6 +28,14 @@ public class ArticleViewModel extends ViewModel {
     public LiveData<ReactionType> getReactionLiveData() {
         return reactionLiveData;
     }
+
+    private final MutableLiveData<Boolean> isFavouriteLiveData = new MutableLiveData<>(false);
+    public LiveData<Boolean> getIsFavouriteLiveData() {
+        return isFavouriteLiveData;
+    }
+
+    private String currentArticleId;
+
     //* UseCases *//
     private final GetArticleByIdUseCase getArticleByIdUseCase = new GetArticleByIdUseCase(
             ArticleRepositoryImpl.getInstance()
@@ -51,9 +59,17 @@ public class ArticleViewModel extends ViewModel {
     //* UseCases *//
 
     public void load(@NonNull String id) {
+        currentArticleId = id;
         mutableLiveData.setValue(new State(null, null, true));
         getArticleByIdUseCase.execute(id, status -> {
-            mutableLiveData.postValue(fromStatus(status));
+            State newState = fromStatus(status);
+            mutableLiveData.postValue(newState);
+
+            if (newState.article != null) {
+                isFavouriteLiveData.postValue(newState.article.isFavourite());
+            } else {
+                isFavouriteLiveData.postValue(false);
+            }
         });
     }
 
@@ -104,15 +120,35 @@ public class ArticleViewModel extends ViewModel {
             }
         });
     }
-    public void addToFavourites() {
 
+    public void addToFavourites() {
+        Boolean isFav = isFavouriteLiveData.getValue();
+        if (currentArticleId == null) return;
+
+        if (isFav != null && isFav) {
+            removeFromFavouritesUseCase.execute(currentArticleId, status -> {
+                if (status.getError() == null) {
+                    isFavouriteLiveData.postValue(false);
+                    load(currentArticleId);
+                }
+            });
+        } else {
+            addToFavouritesUseCase.execute(currentArticleId, status -> {
+                if (status.getError() == null) {
+                    isFavouriteLiveData.postValue(true);
+                    load(currentArticleId);
+                }
+            });
+        }
     }
 
     public static class State {
         @Nullable
         private final String errorMessage;
+
         @Nullable
         private final FullArticleEntity article;
+
         private final boolean isLoading;
 
         public State(@Nullable String errorMessage, @Nullable FullArticleEntity article, boolean isLoading) {

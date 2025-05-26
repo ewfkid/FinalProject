@@ -91,6 +91,15 @@ public class ArticleFragment extends Fragment {
             binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             binding.error.setText(state.getErrorMessage());
             binding.constraintParent.setVisibility(Utils.visibleOrGone(isSuccess));
+            viewModel.getIsFavouriteLiveData().observe(getViewLifecycleOwner(), isFavourite -> {
+                if (isFavourite != null && isFavourite) {
+                    binding.favouritesButton.setImageResource(R.drawable.ic_favourites_yellow);
+                } else {
+                    binding.favouritesButton.setImageResource(R.drawable.ic_favourites_transparent);
+                }
+            });
+
+
 
             if (isSuccess) {
                 FullArticleEntity article = state.getArticle();

@@ -66,7 +66,11 @@ public class LaunchFragment extends Fragment {
                     Picasso.get().load(entity.getMissionPatch()).into(binding.missionImage);
                 }
 
-                binding.details.setText(entity.getDetails());
+                if (entity.getDetails() != null){
+                    binding.details.setText(entity.getDetails());
+                } else {
+                    binding.details.setText(R.string.no_information_available);
+                }
                 binding.dataUtc.setText(formatUtcDate(entity.getLaunchDateUtc()));
 
                 binding.learnMore.setVisibility(Utils.visibleOrGone(
