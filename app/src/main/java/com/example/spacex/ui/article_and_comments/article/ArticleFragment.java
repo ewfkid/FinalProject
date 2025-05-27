@@ -76,10 +76,10 @@ public class ArticleFragment extends Fragment {
     }
 
     private void updateReactionButtons(ReactionType reaction) {
-        if (reaction == ReactionType.Like) {
+        if (reaction == ReactionType.like) {
             binding.likeButton.setImageResource(R.drawable.ic_like_gray);
             binding.dislikeButton.setImageResource(R.drawable.ic_dislike_transparent);
-        } else if (reaction == ReactionType.Dislike) {
+        } else if (reaction == ReactionType.dislike) {
             binding.likeButton.setImageResource(R.drawable.ic_like_transparent);
             binding.dislikeButton.setImageResource(R.drawable.ic_dislike_gray);
         } else {

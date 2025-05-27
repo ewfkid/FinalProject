@@ -1,6 +1,5 @@
 package com.example.spacex.ui.article_and_comments.article;
 
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -24,7 +23,7 @@ public class ArticleViewModel extends ViewModel {
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableLiveData;
 
-    private final MutableLiveData<ReactionType> reactionLiveData = new MutableLiveData<>(ReactionType.None);
+    private final MutableLiveData<ReactionType> reactionLiveData = new MutableLiveData<>(ReactionType.none);
     public LiveData<ReactionType> getReactionLiveData() {
         return reactionLiveData;
     }
@@ -73,6 +72,7 @@ public class ArticleViewModel extends ViewModel {
         });
     }
 
+
     private State fromStatus(Status<FullArticleEntity> status) {
         return new State(
                 status.getError() != null ? status.getError().getLocalizedMessage() : null,
@@ -82,24 +82,26 @@ public class ArticleViewModel extends ViewModel {
     }
 
     public void like(@NonNull String articleId, @NonNull String userId) {
-        if (reactionLiveData.getValue() == ReactionType.Like) {
+        ReactionType currentReaction = reactionLiveData.getValue();
+        if (currentReaction == ReactionType.like) {
             deleteReaction(articleId);
         } else {
-            if (reactionLiveData.getValue() == ReactionType.Dislike) {
+            if (currentReaction == ReactionType.dislike) {
                 deleteReaction(articleId);
             }
-            addReaction(articleId, userId, ReactionType.Like);
+            addReaction(articleId, userId, ReactionType.like);
         }
     }
 
+
     public void dislike(@NonNull String articleId, @NonNull String userId) {
-        if (reactionLiveData.getValue() == ReactionType.Dislike) {
+        if (reactionLiveData.getValue() == ReactionType.dislike) {
             deleteReaction(articleId);
         } else {
-            if (reactionLiveData.getValue() == ReactionType.Like) {
+            if (reactionLiveData.getValue() == ReactionType.like) {
                 deleteReaction(articleId);
             }
-            addReaction(articleId, userId, ReactionType.Dislike);
+            addReaction(articleId, userId, ReactionType.dislike);
         }
     }
 
@@ -112,10 +114,12 @@ public class ArticleViewModel extends ViewModel {
         });
     }
 
+
+
     private void deleteReaction(String articleId) {
         deleteReactionUseCase.execute(articleId, status -> {
             if (status.getError() == null) {
-                reactionLiveData.postValue(ReactionType.None);
+                reactionLiveData.postValue(ReactionType.none);
                 load(articleId);
             }
         });
