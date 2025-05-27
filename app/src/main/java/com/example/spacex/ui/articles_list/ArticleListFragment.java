@@ -29,7 +29,13 @@ public class ArticleListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentArticlesListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(ArticleListViewModel.class);
-        final ArticleListAdapter adapter = new ArticleListAdapter(id -> viewArticle(id));
+        ArticleListAdapter adapter = new ArticleListAdapter(
+                id -> viewArticle(id),
+                (id, isFavourite) -> {
+                    viewModel.setCurrentArticle(id, isFavourite);
+                    viewModel.addToFavourites();
+                }
+        );
         subscribe(viewModel, adapter);
         binding.recycler.setAdapter(adapter);
     }
@@ -48,6 +54,9 @@ public class ArticleListFragment extends Fragment {
             binding.error.setText(state.getErrorMessage());
             if (isSuccess) {
                 adapter.updateData(state.getItems());
+                viewModel.getIsFavouriteLiveData().observe(getViewLifecycleOwner(), isFavourite -> {
+                    adapter.notifyDataSetChanged();
+                });
             }
         });
     }

@@ -122,25 +122,26 @@ public class ArticleViewModel extends ViewModel {
     }
 
     public void addToFavourites() {
-        Boolean isFav = isFavouriteLiveData.getValue();
-        if (currentArticleId == null) return;
+        Boolean current = isFavouriteLiveData.getValue();
+        boolean newValue = current == null || !current;
 
-        if (isFav != null && isFav) {
-            removeFromFavouritesUseCase.execute(currentArticleId, status -> {
-                if (status.getError() == null) {
+        isFavouriteLiveData.setValue(newValue);
+
+        if (newValue) {
+            addToFavouritesUseCase.execute(currentArticleId, status -> {
+                if (status.getError() != null) {
                     isFavouriteLiveData.postValue(false);
-                    load(currentArticleId);
                 }
             });
         } else {
-            addToFavouritesUseCase.execute(currentArticleId, status -> {
-                if (status.getError() == null) {
+            removeFromFavouritesUseCase.execute(currentArticleId, status -> {
+                if (status.getError() != null) {
                     isFavouriteLiveData.postValue(true);
-                    load(currentArticleId);
                 }
             });
         }
     }
+
 
     public static class State {
         @Nullable

@@ -18,10 +18,9 @@ import com.example.spacex.ui.utils.Utils;
 public class FavouritesListFragment extends Fragment {
 
     private FragmentFavouritesListBinding binding;
-
     private FavouritesListViewModel viewModel;
 
-    public FavouritesListFragment(){
+    public FavouritesListFragment() {
         super(R.layout.fragment_favourites_list);
     }
 
@@ -30,12 +29,20 @@ public class FavouritesListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentFavouritesListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(FavouritesListViewModel.class);
-        final FavouritesListAdapter adapter = new FavouritesListAdapter(id -> viewArticle(id));
-        subscribe(viewModel, adapter);
+
+        final FavouritesListAdapter adapter = new FavouritesListAdapter(
+                this::viewArticle,
+                viewModel::removeFromFavourites
+        );
+
         binding.recycler.setAdapter(adapter);
+
+        binding.refresh.setOnRefreshListener(viewModel::update);
+
+        subscribe(viewModel, adapter);
     }
 
-    private void subscribe(final FavouritesListViewModel viewModel, FavouritesListAdapter adapter){
+    private void subscribe(final FavouritesListViewModel viewModel, FavouritesListAdapter adapter) {
         viewModel.stateLiveData.observe(getViewLifecycleOwner(), state -> {
             boolean hasItems = state.getItems() != null && !state.getItems().isEmpty();
             boolean isSuccess = !state.isLoading() && state.getErrorMessage() == null && state.getItems() != null;
@@ -60,7 +67,6 @@ public class FavouritesListFragment extends Fragment {
             }
         });
     }
-
 
     private void viewArticle(@NonNull String articleId) {
         View view = getView();

@@ -41,7 +41,7 @@ public class ArticleDto {
     @SerializedName("comments")
     public ArrayList<CommentDto> comments;
 
-    @SerializedName("favourite")
+    @SerializedName("favorite")
     public boolean favourite;
 
 

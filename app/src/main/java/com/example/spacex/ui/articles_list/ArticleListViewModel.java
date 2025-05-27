@@ -6,11 +6,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.spacex.data.repository.ArticleRepositoryImpl;
-import com.example.spacex.domain.article.CreateArticleUseCase;
+import com.example.spacex.data.repository.FavouritesRepositoryImpl;
 import com.example.spacex.domain.article.GetArticleListUseCase;
-import com.example.spacex.domain.article.UpdateArticleUseCase;
 import com.example.spacex.domain.entity.ItemArticleEntity;
 import com.example.spacex.domain.entity.Status;
+import com.example.spacex.domain.favourites.AddToFavouritesUseCase;
+import com.example.spacex.domain.favourites.RemoveFromFavouritesUseCase;
 
 import java.util.List;
 
@@ -19,20 +20,26 @@ public class ArticleListViewModel extends ViewModel {
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableLiveData;
 
+    private final MutableLiveData<Boolean> isFavouriteLiveData = new MutableLiveData<>();
+    public LiveData<Boolean> getIsFavouriteLiveData() {
+        return isFavouriteLiveData;
+    }
+
     // ** UseCases ** //
     private final GetArticleListUseCase getArticleListUseCase = new GetArticleListUseCase(
             ArticleRepositoryImpl.getInstance()
     );
 
-    private final UpdateArticleUseCase updateArticleUseCase = new UpdateArticleUseCase(
-            ArticleRepositoryImpl.getInstance()
+    private final AddToFavouritesUseCase addToFavouritesUseCase = new AddToFavouritesUseCase(
+            FavouritesRepositoryImpl.getInstance()
     );
 
-    private final CreateArticleUseCase createArticleUseCase = new CreateArticleUseCase(
-            ArticleRepositoryImpl.getInstance()
+    private final RemoveFromFavouritesUseCase removeFromFavouritesUseCase = new RemoveFromFavouritesUseCase(
+            FavouritesRepositoryImpl.getInstance()
     );
     // ** UseCases ** //
 
+    private String currentArticleId;
 
     public ArticleListViewModel() {
         update();
@@ -49,11 +56,40 @@ public class ArticleListViewModel extends ViewModel {
 
     public void update() {
         mutableLiveData.setValue(new State(null, null, true));
-        getArticleListUseCase.execute(status -> {
-            mutableLiveData.postValue(fromStatus(status));
-        });
+        getArticleListUseCase.execute(status -> mutableLiveData.postValue(fromStatus(status)));
     }
 
+    public void addToFavourites() {
+        Boolean current = isFavouriteLiveData.getValue();
+        boolean newValue = current == null || !current;
+        isFavouriteLiveData.setValue(newValue);
+
+        if (currentArticleId == null) return;
+
+        if (newValue) {
+            addToFavouritesUseCase.execute(currentArticleId, status -> {
+                if (status.getError() != null) {
+                    isFavouriteLiveData.postValue(false);
+                } else {
+                    update();
+                }
+            });
+        } else {
+            removeFromFavouritesUseCase.execute(currentArticleId, status -> {
+                if (status.getError() != null) {
+                    isFavouriteLiveData.postValue(true);
+                } else {
+                    update();
+                }
+            });
+        }
+    }
+
+
+    public void setCurrentArticle(String articleId, boolean isFavourite) {
+        currentArticleId = articleId;
+        isFavouriteLiveData.setValue(isFavourite);
+    }
 
     public class State {
 

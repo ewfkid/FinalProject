@@ -16,13 +16,19 @@ import java.util.List;
 
 public class FavouritesListViewModel extends ViewModel {
 
-
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableLiveData;
 
+    // ** UseCases ** //
     private final GetFavouritesListUseCase getFavouritesListUseCase = new GetFavouritesListUseCase(
             FavouritesRepositoryImpl.getInstance()
     );
+
+    private final RemoveFromFavouritesUseCase removeFromFavouritesUseCase = new RemoveFromFavouritesUseCase(
+            FavouritesRepositoryImpl.getInstance()
+    );
+    // ** UseCases ** //
+
     public FavouritesListViewModel() {
         update();
     }
@@ -39,6 +45,14 @@ public class FavouritesListViewModel extends ViewModel {
         mutableLiveData.setValue(new State(null, null, true));
         getFavouritesListUseCase.execute(status -> {
             mutableLiveData.postValue(fromStatus(status));
+        });
+    }
+
+    public void removeFromFavourites(String articleId) {
+        removeFromFavouritesUseCase.execute(articleId, status -> {
+            if (status.getError() == null) {
+                update();
+            }
         });
     }
 

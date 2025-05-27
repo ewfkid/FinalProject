@@ -9,9 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/error"
@@ -42,8 +40,6 @@
             android:id="@+id/constraint_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -125,16 +121,13 @@
                     android:layout_width="20dp"
                     android:layout_height="25dp"
                     android:layout_marginTop="7dp"
-                    android:layout_marginBottom="7dp"
+                    android:layout_marginBottom="10dp"
                     android:background="@android:color/transparent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:src="@drawable/ic_like_transparent"
+                    app:layout_goneMarginBottom="7dp"
                     app:layout_constraintBottom_toBottomOf="@id/constraint_reactions"
                     app:layout_constraintStart_toStartOf="@id/constraint_reactions"
                     app:layout_constraintTop_toTopOf="@id/constraint_reactions" />
-
 
                 <TextView
                     android:id="@+id/amount_of_likes"
@@ -156,10 +149,8 @@
                     android:layout_height="25dp"
                     android:layout_marginStart="10dp"
                     android:background="@android:color/transparent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:src="@drawable/ic_dislike_transparent"
+                    app:layout_constraintBottom_toBottomOf="@id/like_button"
                     app:layout_constraintStart_toEndOf="@id/amount_of_likes"
                     app:layout_constraintTop_toTopOf="@id/like_button" />
 
@@ -179,16 +170,14 @@
 
                 <ImageButton
                     android:id="@+id/favourites_button"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:background="@android:color/transparent"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:src="@drawable/ic_favourites_transparent"
                     app:layout_constraintBottom_toBottomOf="@id/like_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/like_button" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View

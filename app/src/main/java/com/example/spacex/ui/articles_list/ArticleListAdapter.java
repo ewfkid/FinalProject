@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.ViewHolder> {
@@ -20,10 +21,17 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
     @NonNull
     private final Consumer<String> onItemClick;
 
+    @NonNull
+    private final BiConsumer<String, Boolean> onFavouriteClick;
+
     private final List<ItemArticleEntity> data = new ArrayList<>();
 
-    public ArticleListAdapter(@NonNull Consumer<String> onItemClick) {
+    public ArticleListAdapter(
+            @NonNull Consumer<String> onItemClick,
+            @NonNull BiConsumer<String, Boolean> onFavouriteClick
+    ) {
         this.onItemClick = onItemClick;
+        this.onFavouriteClick = onFavouriteClick;
     }
 
     @NonNull
@@ -58,7 +66,6 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
 
         private final ItemArticleBinding binding;
 
-
         public ViewHolder(@NonNull ItemArticleBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
@@ -74,15 +81,16 @@ public class ArticleListAdapter extends RecyclerView.Adapter<ArticleListAdapter.
             } else {
                 binding.userImage.setImageResource(R.drawable.ic_default_user_avatar);
             }
-            if (item.isFavourite()){
+            if (item.isFavourite()) {
                 binding.favouritesButton.setImageResource(R.drawable.ic_favourites_yellow);
             } else {
                 binding.favouritesButton.setImageResource(R.drawable.ic_favourites_transparent);
             }
-            binding.getRoot().setOnClickListener(v -> {
-                onItemClick.accept(item.getId());
+            binding.getRoot().setOnClickListener(v -> onItemClick.accept(item.getId()));
+
+            binding.favouritesButton.setOnClickListener(v -> {
+                onFavouriteClick.accept(item.getId(), item.isFavourite());
             });
         }
-
     }
 }

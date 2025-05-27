@@ -65,6 +65,14 @@ public class ArticleFragment extends Fragment {
         viewModel.getReactionLiveData().observe(getViewLifecycleOwner(), this::updateReactionButtons);
 
         binding.favouritesButton.setOnClickListener(v -> viewModel.addToFavourites());
+        viewModel.getIsFavouriteLiveData().observe(getViewLifecycleOwner(), isFavourite -> {
+            if (isFavourite != null && isFavourite) {
+                binding.favouritesButton.setImageResource(R.drawable.ic_favourites_yellow);
+            } else {
+                binding.favouritesButton.setImageResource(R.drawable.ic_favourites_transparent);
+            }
+        });
+
     }
 
     private void updateReactionButtons(ReactionType reaction) {
@@ -81,7 +89,6 @@ public class ArticleFragment extends Fragment {
     }
 
 
-
     private void subscribe(final ArticleViewModel viewModel) {
         viewModel.stateLiveData.observe(getViewLifecycleOwner(), state -> {
             boolean isSuccess = !state.isLoading()
@@ -91,14 +98,6 @@ public class ArticleFragment extends Fragment {
             binding.error.setVisibility(Utils.visibleOrGone(state.getErrorMessage() != null));
             binding.error.setText(state.getErrorMessage());
             binding.constraintParent.setVisibility(Utils.visibleOrGone(isSuccess));
-            viewModel.getIsFavouriteLiveData().observe(getViewLifecycleOwner(), isFavourite -> {
-                if (isFavourite != null && isFavourite) {
-                    binding.favouritesButton.setImageResource(R.drawable.ic_favourites_yellow);
-                } else {
-                    binding.favouritesButton.setImageResource(R.drawable.ic_favourites_transparent);
-                }
-            });
-
 
 
             if (isSuccess) {
@@ -108,7 +107,6 @@ public class ArticleFragment extends Fragment {
                 binding.articleContent.setText(article.getContent());
                 binding.amountOfDislikes.setText(article.getDislikes().toString());
                 binding.amountOfLikes.setText(article.getLikes().toString());
-
                 if (article.getPhotoUrl() != null) {
                     Picasso.get().load(article.getPhotoUrl()).into(binding.userImage);
                 } else {
