@@ -7,6 +7,8 @@ import com.example.spacex.data.dto.ReactionInitDto;
 import com.example.spacex.data.network.RetrofitFactory;
 import com.example.spacex.data.source.ReactionApi;
 import com.example.spacex.data.utils.CallToConsumer;
+import com.example.spacex.data.utils.mapper.ReactionMapper;
+import com.example.spacex.domain.entity.ReactionEntity;
 import com.example.spacex.domain.entity.Status;
 import com.example.spacex.domain.reaction.ReactionRepository;
 
@@ -48,6 +50,23 @@ public class ReactionRepositoryImpl implements ReactionRepository {
         reactionApi.removeReaction(id).enqueue(new CallToConsumer<>(
                 callback,
                 dto -> null
+        ));
+    }
+
+    @Override
+    public void getReaction(
+            @NonNull String userId,
+            @NonNull String articleId,
+            Consumer<Status<ReactionEntity>> callback
+    ) {
+        reactionApi.getReactionById(userId, articleId).enqueue(new CallToConsumer<>(
+                callback,
+                dto -> {
+                    if (dto == null) {
+                        return null;
+                    }
+                    return ReactionMapper.toReactionEntity(dto);
+                }
         ));
     }
 

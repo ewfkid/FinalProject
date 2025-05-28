@@ -51,7 +51,7 @@ public class ArticleFragment extends Fragment {
         }
 
 
-        viewModel.load(articleId);
+        viewModel.load(articleId, getUserId());
         subscribe(viewModel);
 
         binding.likeButton.setOnClickListener(v -> {

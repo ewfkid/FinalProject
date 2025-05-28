@@ -11,12 +11,14 @@ import com.example.spacex.data.repository.FavouritesRepositoryImpl;
 import com.example.spacex.data.repository.ReactionRepositoryImpl;
 import com.example.spacex.domain.article.GetArticleByIdUseCase;
 import com.example.spacex.domain.entity.FullArticleEntity;
+import com.example.spacex.domain.entity.ReactionEntity;
 import com.example.spacex.domain.entity.ReactionType;
 import com.example.spacex.domain.entity.Status;
 import com.example.spacex.domain.favourites.AddToFavouritesUseCase;
 import com.example.spacex.domain.favourites.RemoveFromFavouritesUseCase;
 import com.example.spacex.domain.reaction.AddReactionUseCase;
 import com.example.spacex.domain.reaction.DeleteReactionUseCase;
+import com.example.spacex.domain.reaction.GetReactionByIdUseCase;
 
 public class ArticleViewModel extends ViewModel {
 
@@ -34,6 +36,7 @@ public class ArticleViewModel extends ViewModel {
     }
 
     private String currentArticleId;
+    private String currentReactionId;
 
     //* UseCases *//
     private final GetArticleByIdUseCase getArticleByIdUseCase = new GetArticleByIdUseCase(
@@ -55,23 +58,43 @@ public class ArticleViewModel extends ViewModel {
     private final AddToFavouritesUseCase addToFavouritesUseCase = new AddToFavouritesUseCase(
             FavouritesRepositoryImpl.getInstance()
     );
+
+    private final GetReactionByIdUseCase getReactionByIdUseCase = new GetReactionByIdUseCase(
+            ReactionRepositoryImpl.getInstance()
+    );
     //* UseCases *//
 
-    public void load(@NonNull String id) {
-        currentArticleId = id;
+    public void load(@NonNull String articleId, @NonNull String userId) {
+        currentArticleId = articleId;
         mutableLiveData.setValue(new State(null, null, true));
-        getArticleByIdUseCase.execute(id, status -> {
+        getArticleByIdUseCase.execute(articleId, status -> {
             State newState = fromStatus(status);
             mutableLiveData.postValue(newState);
-
             if (newState.article != null) {
                 isFavouriteLiveData.postValue(newState.article.isFavourite());
+                getReactionByIdUseCase.execute(userId, articleId, reactionStatus -> {
+                    if (reactionStatus.getError() != null) {
+                        currentReactionId = null;
+                        reactionLiveData.postValue(ReactionType.none);
+                    } else {
+                        ReactionEntity reaction = reactionStatus.getValue();
+                        if (reaction != null) {
+                            currentReactionId = reaction.getId();
+                            reactionLiveData.postValue(reaction.getType());
+                        } else {
+                            currentReactionId = null;
+                            reactionLiveData.postValue(ReactionType.none);
+                        }
+                    }
+                });
+
             } else {
                 isFavouriteLiveData.postValue(false);
+                currentReactionId = null;
+                reactionLiveData.postValue(ReactionType.none);
             }
         });
     }
-
 
     private State fromStatus(Status<FullArticleEntity> status) {
         return new State(
@@ -82,45 +105,75 @@ public class ArticleViewModel extends ViewModel {
     }
 
     public void like(@NonNull String articleId, @NonNull String userId) {
-        ReactionType currentReaction = reactionLiveData.getValue();
-        if (currentReaction == ReactionType.like) {
-            deleteReaction(articleId);
-        } else {
-            if (currentReaction == ReactionType.dislike) {
-                deleteReaction(articleId);
+        getReactionByIdUseCase.execute(userId, articleId, status -> {
+            if (status.getError() != null) {
+                addReaction(articleId, userId, ReactionType.like);
+                return;
             }
-            addReaction(articleId, userId, ReactionType.like);
-        }
+
+            ReactionEntity reaction = status.getValue();
+            ReactionType currentReaction = (reaction != null) ? reaction.getType() : ReactionType.none;
+
+            if (currentReaction == ReactionType.like) {
+                deleteReaction(articleId, userId);
+            } else if (currentReaction == ReactionType.dislike) {
+                deleteReactionUseCase.execute(reaction.getId(), delStatus -> {
+                    if (delStatus.getError() == null) {
+                        currentReactionId = null;
+                        addReaction(articleId, userId, ReactionType.like);
+                    }
+                });
+            } else {
+                addReaction(articleId, userId, ReactionType.like);
+            }
+        });
     }
 
-
     public void dislike(@NonNull String articleId, @NonNull String userId) {
-        if (reactionLiveData.getValue() == ReactionType.dislike) {
-            deleteReaction(articleId);
-        } else {
-            if (reactionLiveData.getValue() == ReactionType.like) {
-                deleteReaction(articleId);
+        getReactionByIdUseCase.execute(userId, articleId, status -> {
+            if (status.getError() != null) {
+                addReaction(articleId, userId, ReactionType.dislike);
+                return;
             }
-            addReaction(articleId, userId, ReactionType.dislike);
-        }
+
+            ReactionEntity reaction = status.getValue();
+            ReactionType currentReaction = (reaction != null) ? reaction.getType() : ReactionType.none;
+
+            if (currentReaction == ReactionType.dislike) {
+                deleteReaction(articleId, userId);
+            } else if (currentReaction == ReactionType.like) {
+                deleteReactionUseCase.execute(reaction.getId(), delStatus -> {
+                    if (delStatus.getError() == null) {
+                        currentReactionId = null;
+                        addReaction(articleId, userId, ReactionType.dislike);
+                    }
+                });
+            } else {
+                addReaction(articleId, userId, ReactionType.dislike);
+            }
+        });
     }
 
     private void addReaction(String articleId, String userId, ReactionType type) {
         addReactionUseCase.execute(articleId, userId, type.name(), status -> {
             if (status.getError() == null) {
                 reactionLiveData.postValue(type);
-                load(articleId);
+                load(articleId, userId);
             }
         });
     }
 
+    private void deleteReaction(String articleId, String userId) {
+        if (currentReactionId == null) {
+            reactionLiveData.postValue(ReactionType.none);
+            return;
+        }
 
-
-    private void deleteReaction(String articleId) {
-        deleteReactionUseCase.execute(articleId, status -> {
+        deleteReactionUseCase.execute(currentReactionId, status -> {
             if (status.getError() == null) {
                 reactionLiveData.postValue(ReactionType.none);
-                load(articleId);
+                currentReactionId = null;
+                load(articleId, userId);
             }
         });
     }
@@ -145,7 +198,6 @@ public class ArticleViewModel extends ViewModel {
             });
         }
     }
-
 
     public static class State {
         @Nullable

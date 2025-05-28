@@ -14,13 +14,13 @@ public class ReactionEntity {
     private final String userId;
 
     @NonNull
-    private final String type;
+    private final ReactionType type;
 
     public ReactionEntity(
             @NonNull String id,
             @NonNull String articleId,
             @NonNull String userId,
-            @NonNull String type
+            @NonNull ReactionType type
     ) {
         this.id = id;
         this.articleId = articleId;
@@ -44,7 +44,7 @@ public class ReactionEntity {
     }
 
     @NonNull
-    public String getType() {
+    public ReactionType getType() {
         return type;
     }
 }
