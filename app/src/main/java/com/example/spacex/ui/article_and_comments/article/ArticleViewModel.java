@@ -155,6 +155,7 @@ public class ArticleViewModel extends ViewModel {
     }
 
     private void addReaction(String articleId, String userId, ReactionType type) {
+        reactionLiveData.postValue(type);
         addReactionUseCase.execute(articleId, userId, type.name(), status -> {
             if (status.getError() == null) {
                 reactionLiveData.postValue(type);
