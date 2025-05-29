@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.spacex.R;
 import com.example.spacex.databinding.ItemArticleBinding;
 import com.example.spacex.domain.entity.ItemArticleEntity;
+import com.example.spacex.domain.entity.ReactionType;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAdapter.ViewHolder> {
@@ -23,14 +26,26 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
     @NonNull
     private final Consumer<String> onFavouriteRemoveClick;
 
+    @NonNull
+    private final Consumer<String> onLikeClick;
+
+    @NonNull
+    private final Consumer<String> onDislikeClick;
+
+    private Map<String, ReactionType> reactionMap = new HashMap<>();
+
     private final List<ItemArticleEntity> data = new ArrayList<>();
 
     public FavouritesListAdapter(
             @NonNull Consumer<String> onItemClick,
-            @NonNull Consumer<String> onFavouriteRemoveClick
+            @NonNull Consumer<String> onFavouriteRemoveClick,
+            @NonNull Consumer<String> onLikeClick,
+            @NonNull Consumer<String> onDislikeClick
     ) {
         this.onItemClick = onItemClick;
         this.onFavouriteRemoveClick = onFavouriteRemoveClick;
+        this.onLikeClick = onLikeClick;
+        this.onDislikeClick = onDislikeClick;
     }
 
     @NonNull
@@ -53,6 +68,11 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
     public void updateData(List<ItemArticleEntity> newData) {
         data.clear();
         data.addAll(newData);
+        notifyDataSetChanged();
+    }
+
+    public void setReactionMap(Map<String, ReactionType> newMap) {
+        this.reactionMap = newMap;
         notifyDataSetChanged();
     }
 
@@ -87,6 +107,24 @@ public class FavouritesListAdapter extends RecyclerView.Adapter<FavouritesListAd
                 onFavouriteRemoveClick.accept(item.getId());
             });
 
+            ReactionType reactionType = reactionMap.getOrDefault(item.getId(), ReactionType.none);
+            switch (reactionType) {
+                case like:
+                    binding.likeButton.setImageResource(R.drawable.ic_like_gray);
+                    binding.dislikeButton.setImageResource(R.drawable.ic_dislike_transparent);
+                    break;
+                case dislike:
+                    binding.likeButton.setImageResource(R.drawable.ic_like_transparent);
+                    binding.dislikeButton.setImageResource(R.drawable.ic_dislike_gray);
+                    break;
+                case none:
+                default:
+                    binding.likeButton.setImageResource(R.drawable.ic_like_transparent);
+                    binding.dislikeButton.setImageResource(R.drawable.ic_dislike_transparent);
+                    break;
+            }
+            binding.likeButton.setOnClickListener(v -> onLikeClick.accept(item.getId()));
+            binding.dislikeButton.setOnClickListener(v -> onDislikeClick.accept(item.getId()));
             binding.getRoot().setOnClickListener(v -> onItemClick.accept(item.getId()));
         }
     }

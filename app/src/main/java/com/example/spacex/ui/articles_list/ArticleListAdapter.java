@@ -10,7 +10,6 @@ import com.example.spacex.R;
 import com.example.spacex.databinding.ItemArticleBinding;
 import com.example.spacex.domain.entity.ItemArticleEntity;
 import com.example.spacex.domain.entity.ReactionType;
-import com.example.spacex.ui.utils.OnReactionClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

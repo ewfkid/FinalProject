@@ -53,7 +53,6 @@ public class ArticleListViewModel extends ViewModel {
         return userId;
     }
 
-
     //* UseCases *//
     private final GetArticleListUseCase getArticleListUseCase = new GetArticleListUseCase(
             ArticleRepositoryImpl.getInstance()
@@ -79,11 +78,6 @@ public class ArticleListViewModel extends ViewModel {
             ReactionRepositoryImpl.getInstance()
     );
     //* UseCases *//
-
-    public ArticleListViewModel() {
-        update();
-    }
-
     private State fromStatus(Status<List<ItemArticleEntity>> status) {
         return new State(
                 status.getError() != null ? status.getError().getLocalizedMessage() : null,

@@ -1,6 +1,8 @@
 package com.example.spacex.ui.favourites_list;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,6 +15,7 @@ import androidx.navigation.Navigation;
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentFavouritesListBinding;
 import com.example.spacex.ui.article_and_comments.SharedScreenFragment;
+import com.example.spacex.ui.favourites_list.factory.FavouritesListViewModelFactory;
 import com.example.spacex.ui.utils.Utils;
 
 public class FavouritesListFragment extends Fragment {
@@ -24,15 +27,27 @@ public class FavouritesListFragment extends Fragment {
         super(R.layout.fragment_favourites_list);
     }
 
+    private String getUserId() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        return prefs.getString("userId", null);
+    }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentFavouritesListBinding.bind(view);
-        viewModel = new ViewModelProvider(this).get(FavouritesListViewModel.class);
+        String userId = getUserId();
+        if (userId == null) {
+            return;
+        }
+        viewModel = new ViewModelProvider(this, new FavouritesListViewModelFactory(userId))
+                .get(FavouritesListViewModel.class);
 
         final FavouritesListAdapter adapter = new FavouritesListAdapter(
                 this::viewArticle,
-                viewModel::removeFromFavourites
+                viewModel::removeFromFavourites,
+                viewModel::like,
+                viewModel::dislike
         );
 
         binding.recycler.setAdapter(adapter);
@@ -64,6 +79,7 @@ public class FavouritesListFragment extends Fragment {
 
             if (hasItems) {
                 adapter.updateData(state.getItems());
+                viewModel.getReactionMapLiveData().observe(getViewLifecycleOwner(), adapter::setReactionMap);
             }
         });
     }

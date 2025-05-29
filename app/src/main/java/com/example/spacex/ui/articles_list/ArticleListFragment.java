@@ -74,12 +74,9 @@ public class ArticleListFragment extends Fragment {
 
             if (isSuccess) {
                 adapter.updateData(state.getItems());
-                viewModel.getIsFavouriteLiveData().observe(getViewLifecycleOwner(), isFavourite -> {
-                    adapter.notifyDataSetChanged();
-                });
             }
         });
-
+        viewModel.getIsFavouriteLiveData().observe(getViewLifecycleOwner(), isFavourite -> adapter.notifyDataSetChanged());
         viewModel.getReactionMapLiveData().observe(getViewLifecycleOwner(), adapter::setReactionMap);
     }
 
