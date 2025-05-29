@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:background="@drawable/card_space_background"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:layout_marginBottom="2dp">
 
     <TextView
         android:id="@+id/event_title"
@@ -12,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textColor="@color/black"
+        android:textColor="@color/g_white"
         android:textStyle="bold"
         tools:text="@tools:sample/lorem" />
 
@@ -29,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"
             android:text="@string/date"
-            android:textColor="@color/g_gray700"
+            android:textColor="@color/white"
             android:textSize="15sp" />
 
         <TextView
@@ -38,15 +41,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:textColor="@color/black"
+            android:textColor="@color/g_white"
             android:textSize="15sp"
             tools:text="2009-01-27" />
 
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/g_gray700" />
-
 </LinearLayout>
