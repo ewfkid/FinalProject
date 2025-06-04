@@ -1,6 +1,7 @@
 package com.example.spacex.ui.profile;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -65,7 +66,14 @@ public class ProfileFragment extends Fragment {
                 }
                 binding.username.setText(user.getUsername());
                 binding.email.setText(user.getEmail());
-                binding.linearLogout.setOnClickListener(v -> viewModel.logout());
+                binding.linearLogout.setOnClickListener(v ->
+                    new AlertDialog.Builder(requireContext())
+                            .setTitle("Logout")
+                            .setMessage("Do you want to logout?")
+                            .setPositiveButton("Yes", (dialog, which) -> viewModel.logout())
+                            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                            .create()
+                            .show());
                 binding.linearFavourites.setOnClickListener(v -> viewFavourites());
                 if (user.getPhotoUrl() != null) {
                     Picasso.get().load(user.getPhotoUrl()).into(binding.userImage);

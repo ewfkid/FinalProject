@@ -1,5 +1,6 @@
 package com.example.spacex.ui.article_and_comments.article;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -136,8 +137,17 @@ public class ArticleFragment extends Fragment {
                         viewEditArticleFragment(article.getId());
                         return true;
                     } else if (itemId == R.id.delete_article) {
-                        viewModel.deleteArticle(article.getId());
-                        viewModel.openArticlesList.observe(getViewLifecycleOwner(), unused -> viewArticleList());
+                        new AlertDialog.Builder(requireContext())
+                                .setTitle("Deleting article")
+                                .setMessage("Do you want to delete this article?")
+                                .setPositiveButton("YES", (dialog, which) -> {
+                                    viewModel.deleteArticle(article.getId());
+                                    viewModel.openArticlesList.observe(getViewLifecycleOwner(), unused -> viewArticleList());
+                                })
+                                .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss())
+                                .create()
+                                .show();
+
                         return true;
                     } else {
                         return false;
@@ -147,6 +157,7 @@ public class ArticleFragment extends Fragment {
             });
         }
     }
+
 
     private void viewArticleList(){
         if (navigator != null) {
