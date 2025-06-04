@@ -163,6 +163,9 @@
             android:defaultValue="0"
             app:nullable="false"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_editArticleFragment_to_articleScreenFragment"
+            app:destination="@id/articleScreenFragment" />
     </fragment>
 
 </navigation>

@@ -1,5 +1,6 @@
 package com.example.spacex.ui.edit_article;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -11,20 +12,24 @@ import com.example.spacex.domain.article.GetArticleByIdUseCase;
 import com.example.spacex.domain.article.UpdateArticleUseCase;
 import com.example.spacex.domain.entity.FullArticleEntity;
 
+import java.util.ArrayList;
+
 public class EditArticleViewModel extends ViewModel {
 
     private final MutableLiveData<State> mutableStateLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableStateLiveData;
 
+    private final MutableLiveData<String> mutableErrorLiveData = new MutableLiveData<>();
+    public final LiveData<String> errorLiveData = mutableErrorLiveData;
+
     private final MutableLiveData<Void> mutableOpenArticleLiveData = new MutableLiveData<>();
     public final LiveData<Void> openProfileLiveData = mutableOpenArticleLiveData;
 
-    private String newTitle;
+    private String title;
 
-    private String newContent;
+    private String content;
 
     private FullArticleEntity currentArticle;
-
 
     //* UseCases *//
     GetArticleByIdUseCase getArticleByIdUseCase = new GetArticleByIdUseCase(
@@ -37,11 +42,11 @@ public class EditArticleViewModel extends ViewModel {
     //* UseCases *//
 
     public void changeTitle(String title) {
-        this.newTitle = title;
+        this.title = title;
     }
 
     public void changeContent(String content) {
-        this.newContent = content;
+        this.content = content;
     }
 
     public void load(@NonNull String articleId) {
@@ -51,40 +56,41 @@ public class EditArticleViewModel extends ViewModel {
                 currentArticle = status.getValue();
                 mutableStateLiveData.postValue(new State(null, currentArticle, false));
             } else {
-                mutableStateLiveData.postValue(new State("Failed to load user", null, false));
+                mutableStateLiveData.postValue(new State("Failed to load article", null, false));
             }
         });
     }
 
-    public void save(@NonNull String articleId) {
-        if (currentArticle == null) {
-            mutableStateLiveData.postValue(new State("Cannot save: article not loaded", null, false));
+    public void save() {
+        if (title == null || title.isEmpty()) {
+            mutableErrorLiveData.postValue("Title cannot be empty");
             return;
         }
-        String updatedTitle = (newTitle != null && !newTitle.isEmpty()) ? newTitle : currentArticle.getTitle();
-        String updatedContent = (newContent != null && !newContent.isEmpty()) ? newContent : currentArticle.getContent();
+        if (content == null || content.isEmpty()) {
+            mutableErrorLiveData.postValue("Content cannot be empty");
+            return;
+        }
 
-        mutableStateLiveData.postValue(new State(null, currentArticle, true));
-
-//        updateArticleUseCase.execute(
-//                currentArticle.getId(),
-//                updatedTitle,
-//                updatedContent,
-//                currentArticle.getUsername(),
-//                currentArticle.getPhotoUrl(),
-//                currentArticle.getLikes(),
-//                currentArticle.getDislikes(),
-//                currentArticle.getComments(),
-//                currentArticle.isFavourite(),
-//                status -> {
-//                    if (status.getError() == null && status.getValue() != null) {
-//                        mutableOpenArticleLiveData.postValue(null);
-//                        mutableStateLiveData.postValue(new State("Failed to update article", currentArticle, false));
-//                    }
-//                }
-//        );
+        updateArticleUseCase.execute(
+                currentArticle.getId(),
+                title,
+                content,
+                currentArticle.getUsername(),
+                currentArticle.getPhotoUrl(),
+                currentArticle.getLikes(),
+                currentArticle.getDislikes(),
+                new ArrayList<>(currentArticle.getComments()),
+                currentArticle.isFavourite(),
+                status -> {
+                    if (status.getError() == null && status.getValue() != null) {
+                        mutableOpenArticleLiveData.postValue(null);
+                        mutableStateLiveData.postValue(new State("Failed to update article", currentArticle, false));
+                    } else {
+                        mutableOpenArticleLiveData.postValue(null);
+                    }
+                }
+        );
     }
-
 
     public static class State {
         @Nullable

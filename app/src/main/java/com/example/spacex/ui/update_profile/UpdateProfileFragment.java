@@ -28,9 +28,9 @@ import com.canhub.cropper.CropImageView;
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentUpdateProfileBinding;
 import com.example.spacex.domain.entity.UserEntity;
+import com.example.spacex.ui.service.UserSessionManager;
 import com.example.spacex.ui.update_profile.factory.UpdateProfileViewModelFactory;
 import com.example.spacex.ui.utils.OnChangeText;
-import com.example.spacex.ui.service.UserSessionManager;
 import com.example.spacex.ui.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -146,11 +146,7 @@ public class UpdateProfileFragment extends Fragment {
                 }
             }
         });
-
-
-        viewModel.openProfileLiveData.observe(getViewLifecycleOwner(), unused -> {
-            goBack();
-        });
+        viewModel.openProfileLiveData.observe(getViewLifecycleOwner(), unused -> goBack());
     }
 
     private void launchGalleryPicker() {
