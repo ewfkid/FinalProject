@@ -75,9 +75,7 @@ public class ProfileFragment extends Fragment {
                 binding.constraintProfile.setOnClickListener(v -> viewUpdateFragment(getUserId()));
             }
         });
-        viewModel.logoutLiveData.observe(getViewLifecycleOwner(), unused -> {
-            ((MyNavigator) requireActivity()).onLogout();
-        });
+        viewModel.logoutLiveData.observe(getViewLifecycleOwner(), unused -> ((MyNavigator) requireActivity()).onLogout());
     }
 
     private void viewUpdateFragment(@NonNull String id) {

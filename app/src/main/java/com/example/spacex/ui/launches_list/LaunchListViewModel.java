@@ -28,9 +28,7 @@ public class LaunchListViewModel extends ViewModel {
 
     public void update() {
         mutableLiveData.setValue(new State(null, null, true));
-        getLaunchListUseCase.execute(status -> {
-            mutableLiveData.postValue(fromStatus(status));
-        });
+        getLaunchListUseCase.execute(status -> mutableLiveData.postValue(fromStatus(status)));
     }
 
     private State fromStatus(Status<List<ItemLaunchEntity>> status) {

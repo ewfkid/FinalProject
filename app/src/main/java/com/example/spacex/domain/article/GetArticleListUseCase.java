@@ -1,7 +1,5 @@
 package com.example.spacex.domain.article;
 
-import androidx.annotation.NonNull;
-
 import com.example.spacex.domain.entity.ItemArticleEntity;
 import com.example.spacex.domain.entity.Status;
 

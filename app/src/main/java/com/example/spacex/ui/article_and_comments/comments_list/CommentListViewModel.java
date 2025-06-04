@@ -49,9 +49,7 @@ public class CommentListViewModel extends ViewModel {
 
     public void update() {
         mutableLiveData.setValue(new State(null, null, true));
-        getCommentListUseCase.execute(articleId, status -> {
-            mutableLiveData.postValue(fromStatus(status));
-        });
+        getCommentListUseCase.execute(articleId, status -> mutableLiveData.postValue(fromStatus(status)));
     }
 
     private State fromStatus(Status<List<CommentEntity>> status) {
@@ -82,7 +80,7 @@ public class CommentListViewModel extends ViewModel {
 
         String username = user.getUsername();
         String photoUrl = user.getPhotoUrl();
-        String userId = String.valueOf(user.getId());
+        String userId = user.getId();
 
         addCommentUseCase.execute(
                 articleId,

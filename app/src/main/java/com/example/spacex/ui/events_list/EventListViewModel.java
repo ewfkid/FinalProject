@@ -28,9 +28,7 @@ public class EventListViewModel extends ViewModel {
 
     public void update() {
         mutableLiveData.setValue(new State(null, null, true));
-        getEventListUseCase.execute(status -> {
-            mutableLiveData.postValue(fromStatus(status));
-        });
+        getEventListUseCase.execute(status -> mutableLiveData.postValue(fromStatus(status)));
     }
 
     private State fromStatus(Status<List<ItemEventEntity>> status) {

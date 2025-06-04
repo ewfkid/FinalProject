@@ -40,9 +40,7 @@ public class ProfileViewModel extends ViewModel {
 
     public void load(@NonNull String id) {
         mutableLiveData.setValue(new State(null, null, true));
-        getUserByIdUseCase.execute(id, status -> {
-            mutableLiveData.postValue(fromStatus(status));
-        });
+        getUserByIdUseCase.execute(id, status -> mutableLiveData.postValue(fromStatus(status)));
     }
 
     public void logout() {

@@ -63,12 +63,6 @@ public class CreateArticleViewModel extends AndroidViewModel {
 
         String photoUrl = user.getPhotoUrl();
 
-
-        if (username == null) {
-            mutableErrorLiveData.postValue("User not logged in");
-            return;
-        }
-
         createArticleUseCase.execute(
                 title,
                 content,

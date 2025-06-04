@@ -30,7 +30,7 @@ public class EventListFragment extends Fragment {
         binding = FragmentEventsListBinding.bind(view);
         viewModel = new ViewModelProvider(this).get(EventListViewModel.class);
         binding.refresh.setOnRefreshListener(() -> viewModel.update());
-        final EventListAdapter adapter = new EventListAdapter(id -> viewEvent(id));
+        final EventListAdapter adapter = new EventListAdapter(this::viewEvent);
         binding.recycler.setAdapter(adapter);
         subscribe(viewModel, adapter);
     }

@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 public class EventRepositoryImpl implements EventRepository {
 
-    private EventApi eventApi = RetrofitFactory.getInstance().getEventApi();
+    private final EventApi eventApi = RetrofitFactory.getInstance().getEventApi();
 
     private static EventRepositoryImpl INSTANCE;
 
