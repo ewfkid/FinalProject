@@ -20,6 +20,9 @@ import com.example.spacex.ui.utils.SharedFragmentNavigator;
 import com.example.spacex.ui.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 public class ArticleFragment extends Fragment {
 
     private FragmentArticleBinding binding;
@@ -130,6 +133,16 @@ public class ArticleFragment extends Fragment {
             binding.moreButton.setOnClickListener(v -> {
                 PopupMenu popup = new PopupMenu(requireContext(), v);
                 popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                try {
+                    Field field = popup.getClass().getDeclaredField("mPopup");
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceShowIcon = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceShowIcon.invoke(menuPopupHelper, true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 popup.setOnMenuItemClickListener(item -> {
                     int itemId = item.getItemId();
@@ -147,25 +160,25 @@ public class ArticleFragment extends Fragment {
                                 .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss())
                                 .create()
                                 .show();
-
                         return true;
                     } else {
                         return false;
                     }
                 });
+
                 popup.show();
             });
         }
     }
 
 
-    private void viewArticleList(){
+    private void viewArticleList() {
         if (navigator != null) {
             navigator.onArticlesListRequested();
         }
     }
 
-    private void viewEditArticleFragment(@NonNull String articleId){
+    private void viewEditArticleFragment(@NonNull String articleId) {
         if (navigator != null) {
             navigator.onEditArticleRequested(articleId);
         }
