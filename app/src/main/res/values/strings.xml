@@ -42,4 +42,7 @@
     <string name="hint_phone">Phone</string>
     <string name="add_comment">Add comment</string>
     <string name="no_information_available">No information available</string>
+    <string name="title_edit">Edit</string>
+    <string name="title_delete">Delete</string>
+    <string name="edit_article">Edit Article</string>
 </resources>

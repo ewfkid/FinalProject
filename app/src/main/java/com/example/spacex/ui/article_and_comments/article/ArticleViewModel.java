@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.spacex.data.repository.ArticleRepositoryImpl;
 import com.example.spacex.data.repository.FavouritesRepositoryImpl;
 import com.example.spacex.data.repository.ReactionRepositoryImpl;
+import com.example.spacex.domain.article.DeleteArticleUseCase;
 import com.example.spacex.domain.article.GetArticleByIdUseCase;
 import com.example.spacex.domain.entity.FullArticleEntity;
 import com.example.spacex.domain.entity.ReactionEntity;
@@ -25,12 +26,17 @@ public class ArticleViewModel extends ViewModel {
     private final MutableLiveData<State> mutableLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableLiveData;
 
+    private final MutableLiveData<Void> mutableOpenArticleLiveData = new MutableLiveData<>();
+    public final LiveData<Void> openArticlesList = mutableOpenArticleLiveData;
+
     private final MutableLiveData<ReactionType> reactionLiveData = new MutableLiveData<>(ReactionType.none);
+
     public LiveData<ReactionType> getReactionLiveData() {
         return reactionLiveData;
     }
 
     private final MutableLiveData<Boolean> isFavouriteLiveData = new MutableLiveData<>(false);
+
     public LiveData<Boolean> getIsFavouriteLiveData() {
         return isFavouriteLiveData;
     }
@@ -61,6 +67,10 @@ public class ArticleViewModel extends ViewModel {
 
     private final GetReactionByIdUseCase getReactionByIdUseCase = new GetReactionByIdUseCase(
             ReactionRepositoryImpl.getInstance()
+    );
+
+    private final DeleteArticleUseCase deleteArticleUseCase = new DeleteArticleUseCase(
+            ArticleRepositoryImpl.getInstance()
     );
     //* UseCases *//
 
@@ -198,6 +208,14 @@ public class ArticleViewModel extends ViewModel {
                 }
             });
         }
+    }
+
+    public void deleteArticle(@NonNull String articleId) {
+        deleteArticleUseCase.execute(articleId, status -> {
+            if (status.getError() == null){
+                mutableOpenArticleLiveData.postValue(null);
+            }
+        });
     }
 
     public static class State {

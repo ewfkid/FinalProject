@@ -7,13 +7,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.spacex.R;
 import com.example.spacex.databinding.FragmentArticleScreenBinding;
 import com.example.spacex.ui.article_and_comments.article.ArticleFragment;
 import com.example.spacex.ui.article_and_comments.comments_list.CommentListFragment;
+import com.example.spacex.ui.utils.SharedFragmentNavigator;
 
-public class SharedScreenFragment extends Fragment {
+public class SharedScreenFragment extends Fragment implements SharedFragmentNavigator {
 
     private FragmentArticleScreenBinding binding;
     private static final String KEY_ARTICLE_ID = "articleId";
@@ -54,5 +56,17 @@ public class SharedScreenFragment extends Fragment {
     public void onDestroyView() {
         binding = null;
         super.onDestroyView();
+    }
+
+    @Override
+    public void onEditArticleRequested(@NonNull String articleId) {
+        Bundle args = new Bundle();
+        args.putString("articleId", articleId);
+        NavHostFragment.findNavController(this).navigate(R.id.action_articleScreenFragment_to_editArticleFragment, args);
+    }
+
+    @Override
+    public void onArticlesListRequested() {
+        NavHostFragment.findNavController(this).navigate(R.id.action_articleScreenFragment_to_articlesListFragment);
     }
 }

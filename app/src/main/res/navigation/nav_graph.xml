@@ -112,6 +112,12 @@
             android:defaultValue="0"
             app:nullable="false"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_articleScreenFragment_to_editArticleFragment"
+            app:destination="@id/editArticleFragment" />
+        <action
+            android:id="@+id/action_articleScreenFragment_to_articlesListFragment"
+            app:destination="@id/articlesListFragment" />
 
     </fragment>
     <fragment
@@ -147,5 +153,16 @@
             app:destination="@id/profileFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/editArticleFragment"
+        android:name="com.example.spacex.ui.edit_article.EditArticleFragment"
+        android:label="EditArticleFragment"
+        tools:layout="@layout/fragment_edit_article">
+        <argument
+            android:name="articleId"
+            android:defaultValue="0"
+            app:nullable="false"
+            app:argType="string"/>
+    </fragment>
 
 </navigation>

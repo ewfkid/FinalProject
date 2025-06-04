@@ -27,15 +27,6 @@ import java.util.Map;
 
 public class UpdateProfileViewModel extends ViewModel {
 
-    //* UseCases *//
-    private final UpdateUserUseCase updateUserUseCase = new UpdateUserUseCase(
-            UserRepositoryImpl.getInstance()
-    );
-    private final GetUserByIdUseCase getUserByIdUseCase = new GetUserByIdUseCase(
-            UserRepositoryImpl.getInstance()
-    );
-    //* UseCases *//
-
     private final MutableLiveData<State> mutableStateLiveData = new MutableLiveData<>();
     public final LiveData<State> stateLiveData = mutableStateLiveData;
 
@@ -50,6 +41,16 @@ public class UpdateProfileViewModel extends ViewModel {
     private String newEmail;
     private String newPhone;
     private String newPhotoUrl = null;
+
+    //* UseCases *//
+    private final UpdateUserUseCase updateUserUseCase = new UpdateUserUseCase(
+            UserRepositoryImpl.getInstance()
+    );
+    private final GetUserByIdUseCase getUserByIdUseCase = new GetUserByIdUseCase(
+            UserRepositoryImpl.getInstance()
+    );
+    //* UseCases *//
+
 
     public UpdateProfileViewModel(UserSessionManager userSessionManager) {
         this.userSessionManager = userSessionManager;
